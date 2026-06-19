@@ -47,6 +47,13 @@ header{background:linear-gradient(135deg,#001a00 0%,#0d0020 100%);border-bottom:
 label{display:block;color:#CE93D8;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.4rem}
 input[type=text],input[type=email]{width:100%;background:#0d1a0f;border:1.5px solid #1a3020;color:#e8f5e9;padding:.8rem 1rem;border-radius:8px;font-size:.95rem;outline:none;transition:border-color .2s;-webkit-appearance:none}
 input[type=text]:focus,input[type=email]:focus{border-color:#7B1FA2}
+
+select{width:100%;background:#0d1a0f;border:1.5px solid #1a3020;color:#e8f5e9;padding:.8rem 1rem;border-radius:8px;font-size:.9rem;outline:none;transition:border-color .2s;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237B1FA2' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .8rem center}
+select:focus{border-color:#7B1FA2}
+select option{background:#0d1a0f;color:#e8f5e9}
+select.dup{border-color:#f44336 !important}
+.otro-input{margin-top:.5rem;display:none}
+
 .mb{margin-bottom:1rem}
 
 .hint{background:#0d1a0f;border-left:3px solid #7B1FA2;border-radius:0 6px 6px 0;padding:.7rem 1rem;margin-bottom:1.25rem;font-size:.8rem;color:#5a8060;line-height:1.55}
@@ -133,38 +140,38 @@ input[type=text]:focus,input[type=email]:focus{border-color:#7B1FA2}
     <div class="card">
       <div class="card-header"><div class="card-num">2</div><div class="card-title">Cuadro Masculino</div></div>
       <div class="card-body">
-        <div class="hint">Escribe el apellido o nombre del tenista en cada casilla. <strong>+10 pts extra</strong> por cada jugador fuera de los primeros 16 preclasificados que aciertes.</div>
+        <div class="hint">Selecciona el tenista de la lista. Si crees que llegará alguien fuera de los 32 preclasificados, elige <strong>Otro</strong> y escribe el apellido.</div>
 
         <div class="section-label">Cuartos de Final <span class="pts-pill">30 pts c/u — 8 jugadores</span></div>
         <div class="players-grid">
-          <div class="player-slot"><div class="player-num">Jugador 1</div><input type="text" id="c1" placeholder="Ej: Djokovic"></div>
-          <div class="player-slot"><div class="player-num">Jugador 2</div><input type="text" id="c2" placeholder="Ej: Alcaraz"></div>
-          <div class="player-slot"><div class="player-num">Jugador 3</div><input type="text" id="c3" placeholder="Ej: Sinner"></div>
-          <div class="player-slot"><div class="player-num">Jugador 4</div><input type="text" id="c4" placeholder="Ej: Zverev"></div>
-          <div class="player-slot"><div class="player-num">Jugador 5</div><input type="text" id="c5" placeholder="Ej: Medvedev"></div>
-          <div class="player-slot"><div class="player-num">Jugador 6</div><input type="text" id="c6" placeholder="Ej: Rublev"></div>
-          <div class="player-slot"><div class="player-num">Jugador 7</div><input type="text" id="c7" placeholder="Ej: Hurkacz"></div>
-          <div class="player-slot"><div class="player-num">Jugador 8</div><input type="text" id="c8" placeholder="Ej: Fritz"></div>
+          <div class="player-slot"><div class="player-num">Jugador 1</div><div id="sel_c1"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 2</div><div id="sel_c2"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 3</div><div id="sel_c3"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 4</div><div id="sel_c4"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 5</div><div id="sel_c5"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 6</div><div id="sel_c6"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 7</div><div id="sel_c7"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 8</div><div id="sel_c8"></div></div>
         </div>
 
         <div class="section-label">Semifinal <span class="pts-pill">40 pts c/u — 4 jugadores</span></div>
         <div class="players-grid">
-          <div class="player-slot"><div class="player-num">Jugador 1</div><input type="text" id="s1" placeholder="Nombre del tenista"></div>
-          <div class="player-slot"><div class="player-num">Jugador 2</div><input type="text" id="s2" placeholder="Nombre del tenista"></div>
-          <div class="player-slot"><div class="player-num">Jugador 3</div><input type="text" id="s3" placeholder="Nombre del tenista"></div>
-          <div class="player-slot"><div class="player-num">Jugador 4</div><input type="text" id="s4" placeholder="Nombre del tenista"></div>
+          <div class="player-slot"><div class="player-num">Jugador 1</div><div id="sel_s1"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 2</div><div id="sel_s2"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 3</div><div id="sel_s3"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 4</div><div id="sel_s4"></div></div>
         </div>
 
         <div class="section-label">Final <span class="pts-pill">50 pts c/u — 2 jugadores</span></div>
         <div class="players-grid">
-          <div class="player-slot"><div class="player-num">Jugador 1</div><input type="text" id="f1" placeholder="Nombre del tenista"></div>
-          <div class="player-slot"><div class="player-num">Jugador 2</div><input type="text" id="f2" placeholder="Nombre del tenista"></div>
+          <div class="player-slot"><div class="player-num">Jugador 1</div><div id="sel_f1"></div></div>
+          <div class="player-slot"><div class="player-num">Jugador 2</div><div id="sel_f2"></div></div>
         </div>
 
         <div class="section-label">Campeón Masculino <span class="pts-pill">80 pts</span></div>
         <div class="player-slot">
           <div class="player-num">Campeón</div>
-          <input type="text" id="campeon_m" placeholder="Nombre del campeón masculino">
+          <div id="sel_campeon_m"></div>
         </div>
       </div>
     </div>
@@ -176,7 +183,7 @@ input[type=text]:focus,input[type=email]:focus{border-color:#7B1FA2}
         <div class="section-label">Campeona Femenina <span class="pts-pill">50 pts</span></div>
         <div class="player-slot">
           <div class="player-num">Campeona</div>
-          <input type="text" id="campeon_f" placeholder="Nombre de la campeona femenina">
+          <div id="sel_campeon_f"></div>
         </div>
       </div>
     </div>
@@ -191,14 +198,14 @@ input[type=text]:focus,input[type=email]:focus{border-color:#7B1FA2}
             <div class="special-name">Jugador Sorpresa</div>
             <div class="special-pts">30 pts</div>
             <div class="special-desc">Jugador fuera de los 32 preclasificados que realizará el mejor torneo.</div>
-            <input type="text" id="sorpresa" placeholder="Nombre del jugador">
+            <div id="sel_sorpresa"></div>
           </div>
           <div class="special-card">
             <div class="special-icon">💥</div>
             <div class="special-name">Jugador Desastre</div>
             <div class="special-pts">20 pts</div>
-            <div class="special-desc">Jugador dentro del top 10 eliminado en rondas iniciales.</div>
-            <input type="text" id="desastre" placeholder="Nombre del jugador">
+            <div class="special-desc">Jugador del top 10 eliminado en rondas iniciales.</div>
+            <div id="sel_desastre"></div>
           </div>
         </div>
       </div>
@@ -215,6 +222,102 @@ input[type=text]:focus,input[type=email]:focus{border-color:#7B1FA2}
 
 const REGISTRO_URL = 'https://script.google.com/macros/s/AKfycbygrPEPSNgjVVg3L5B2aHvucZPe3Otvb-jjprLGCTkb27P6aqpcLbjzVho_9XYMlO4mrg/exec';
 const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbxsPwHMxDQFOJ-9Aso5wcP8noufoIAeTqW8cO8QakWXzgQlbycn0hf8Zd_AUG1BJu5IvA/exec';
+
+// ── Entry list — 32 cabezas de serie masculino ────────────────
+const SEEDS = [
+  'Sinner', 'Zverev', 'Djokovic', 'Auger-Aliassime',
+  'Shelton', 'Medvedev', 'Fritz', 'De Minaur',
+  'Bublik', 'Cobolli', 'Rublev', 'Lehecka',
+  'Khachanov', 'Darderi', 'Ruud', 'Fils',
+  'Tien', 'Tiafoe', 'Norrie', 'Davidovich Fokina',
+  'Rinderknecht', 'Etcheverry', 'Paul', 'Cerundolo',
+  'Mensik', 'Jodar', 'Fonseca', 'Griekspoor',
+  'Moutet', 'Nakashima', 'Humbert', 'Tabilo',
+];
+
+const TOP10 = SEEDS.slice(0, 10);
+
+const SEEDS_F = [
+  'Sabalenka', 'Rybakina', 'Swiatek', 'Pegula',
+  'Gauff', 'Anisimova', 'Andreeva',
+];
+
+const SEEDS_SORPRESA = [
+  'Blockx', 'Shapovalov', 'Bergs', 'Munar', 'Michelsen',
+  'Navone', 'Mannarino', 'Cilic', 'Kecmanovic', 'Diallo',
+  'Quinn', 'Borges', 'Atmane', 'Marozsan', 'Van de Zandschulp',
+  'Cerundolo J.M.', 'Hanfmann', 'Medjedovic',
+];
+
+const GRUPOS = {
+  cuartos:  ['c1','c2','c3','c4','c5','c6','c7','c8'],
+  semifinal: ['s1','s2','s3','s4'],
+  final:    ['f1','f2'],
+};
+
+function dupEnGrupo(ids) {
+  const vals = ids.map(getPlayer).filter(v => v);
+  return vals.length !== new Set(vals).size;
+}
+
+function marcarDuplicados() {
+  Object.values(GRUPOS).forEach(ids => {
+    const vals = ids.map(getPlayer);
+    const conteo = {};
+    vals.forEach(v => { if (v) conteo[v] = (conteo[v] || 0) + 1; });
+    ids.forEach(id => {
+      const sel = document.getElementById(id);
+      if (!sel) return;
+      const v = getPlayer(id);
+      sel.classList.toggle('dup', v && conteo[v] > 1);
+    });
+  });
+}
+
+// ── Crear select ──────────────────────────────────────────────
+function buildSelect(containerId, id, options, conOtro = true) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+
+  let html = `<select id="${id}" onchange="toggleOtro('${id}');marcarDuplicados()"><option value="">-- Selecciona --</option>`;
+  options.forEach(p => { html += `<option value="${p}">${p}</option>`; });
+  if (conOtro) html += `<option value="Otro">Otro...</option>`;
+  html += `</select>`;
+  if (conOtro) html += `<input type="text" id="${id}_otro" class="otro-input" placeholder="Escribe el apellido" oninput="marcarDuplicados()">`;
+  wrap.innerHTML = html;
+}
+
+function toggleOtro(id) {
+  const sel  = document.getElementById(id);
+  const otro = document.getElementById(id + '_otro');
+  if (!sel || !otro) return;
+  otro.style.display = sel.value === 'Otro' ? 'block' : 'none';
+  if (sel.value === 'Otro') otro.focus();
+}
+
+function getPlayer(id) {
+  const sel = document.getElementById(id);
+  if (!sel) return document.getElementById(id) ? document.getElementById(id).value.trim() : '';
+  if (sel.tagName === 'SELECT') {
+    if (sel.value === 'Otro') {
+      const otro = document.getElementById(id + '_otro');
+      return otro ? otro.value.trim() : '';
+    }
+    return sel.value;
+  }
+  return sel.value.trim();
+}
+
+// ── Inicializar selects ───────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  ['c1','c2','c3','c4','c5','c6','c7','c8'].forEach(id => buildSelect('sel_'+id, id, SEEDS));
+  ['s1','s2','s3','s4'].forEach(id => buildSelect('sel_'+id, id, SEEDS));
+  ['f1','f2'].forEach(id => buildSelect('sel_'+id, id, SEEDS));
+  buildSelect('sel_campeon_m', 'campeon_m', SEEDS);
+  buildSelect('sel_campeon_f', 'campeon_f', SEEDS_F);
+  buildSelect('sel_sorpresa',  'sorpresa',  SEEDS_SORPRESA);
+  buildSelect('sel_desastre',  'desastre',  TOP10, false);
+});
 
 // ── Verificación ──────────────────────────────────────────────
 async function verificar() {
@@ -235,7 +338,6 @@ async function verificar() {
       btn.disabled = false; btn.textContent = 'Verificar'; return;
     }
 
-    // Verificar si ya envió F1
     try {
       const chk  = await fetch(SCRIPT_URL + '?cedula=' + encodeURIComponent(cedula));
       const chkD = await chk.json();
@@ -244,9 +346,8 @@ async function verificar() {
         document.getElementById('yaEnvioBox').style.display = 'block';
         return;
       }
-    } catch(e) { /* continúa mostrando el formulario */ }
+    } catch(e) {}
 
-    // Mostrar formulario
     document.getElementById('gateWrap').style.display  = 'none';
     document.getElementById('mainForm').style.display  = 'block';
     document.getElementById('nombre').value = data.nombre || '';
@@ -265,24 +366,25 @@ function mostrarError(msg) {
 
 // ── Envío ─────────────────────────────────────────────────────
 async function submitForm() {
+  const cuartos   = ['c1','c2','c3','c4','c5','c6','c7','c8'].map(getPlayer);
+  const semi      = ['s1','s2','s3','s4'].map(getPlayer);
+  const final_j   = ['f1','f2'].map(getPlayer);
+  const campeon_m = getPlayer('campeon_m');
+  const campeon_f = getPlayer('campeon_f');
+  const sorpresa  = getPlayer('sorpresa');
+  const desastre  = getPlayer('desastre');
+
   const errs = [];
-  const g = id => document.getElementById(id).value.trim();
-
-  const cuartos  = [g('c1'),g('c2'),g('c3'),g('c4'),g('c5'),g('c6'),g('c7'),g('c8')];
-  const semi     = [g('s1'),g('s2'),g('s3'),g('s4')];
-  const final_j  = [g('f1'),g('f2')];
-  const campeon_m= g('campeon_m');
-  const campeon_f= g('campeon_f');
-  const sorpresa = g('sorpresa');
-  const desastre = g('desastre');
-
-  if (cuartos.some(p => !p))  errs.push('Completa los 8 jugadores de Cuartos de Final.');
-  if (semi.some(p => !p))     errs.push('Completa los 4 jugadores de Semifinal.');
-  if (final_j.some(p => !p))  errs.push('Completa los 2 jugadores de la Final.');
-  if (!campeon_m) errs.push('Indica el campeón masculino.');
+  if (cuartos.some(p => !p))  errs.push('Selecciona los 8 jugadores de Cuartos de Final.');
+  if (semi.some(p => !p))     errs.push('Selecciona los 4 jugadores de Semifinal.');
+  if (final_j.some(p => !p))  errs.push('Selecciona los 2 jugadores de la Final.');
+  if (!campeon_m) errs.push('Selecciona el campeón masculino.');
   if (!campeon_f) errs.push('Indica la campeona femenina.');
   if (!sorpresa)  errs.push('Indica el jugador sorpresa.');
-  if (!desastre)  errs.push('Indica el jugador desastre.');
+  if (!desastre)  errs.push('Selecciona el jugador desastre.');
+  if (dupEnGrupo(GRUPOS.cuartos))   errs.push('Hay jugadores repetidos en Cuartos de Final.');
+  if (dupEnGrupo(GRUPOS.semifinal)) errs.push('Hay jugadores repetidos en Semifinal.');
+  if (dupEnGrupo(GRUPOS.final))     errs.push('Hay jugadores repetidos en la Final.');
 
   if (errs.length) { showAlert('⚠️ ' + errs[0], 'error'); return; }
 
@@ -292,8 +394,8 @@ async function submitForm() {
   const payload = {
     formulario: 'Formulario 1 - Jugadores',
     timestamp:  new Date().toISOString(),
-    nombre:     g('nombre'),
-    cedula:     g('cedula'),
+    nombre:     document.getElementById('nombre').value.trim(),
+    cedula:     document.getElementById('cedula').value.trim(),
     cuartos:    cuartos.join(', '),
     semifinal:  semi.join(', '),
     final:      final_j.join(', '),
