@@ -1,9 +1,110 @@
-🎾
-Polla Wimbledon 2026
-REGISTRO DE PARTICIPANTES
-NOMBRE COMPLETO *
-CORREO ELECTRÓNICO *
-NÚMERO DE CÉDULA *
-TELÉFONO / WHATSAPP *
-REGISTRARME →
-Al registrarte quedas inscrito en la Polla Wimbledon 2026 y recibirás acceso a los formularios de pronósticos.
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polla Wimbledon 2026 — Registro</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050f08;color:#e8f5e9;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 1rem}
+
+.card{background:#0c150e;border:1.5px solid #7B1FA2;border-radius:16px;padding:2.5rem 2rem;max-width:460px;width:100%}
+
+.logo{text-align:center;margin-bottom:1.75rem}
+.logo-icon{font-size:2.5rem;margin-bottom:.5rem}
+.logo-title{font-size:1.3rem;font-weight:900;color:#fff;letter-spacing:.06em}
+.logo-title span{color:#CE93D8}
+.logo-sub{font-size:.78rem;color:#81C784;font-weight:700;text-transform:uppercase;letter-spacing:.2em;margin-top:.25rem}
+
+label{display:block;color:#CE93D8;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.4rem}
+input{width:100%;background:#0d1a0f;border:1.5px solid #1a3020;color:#e8f5e9;padding:.85rem 1rem;border-radius:8px;font-size:.95rem;outline:none;transition:border-color .2s;-webkit-appearance:none}
+input:focus{border-color:#7B1FA2}
+.mb{margin-bottom:1rem}
+
+.btn{width:100%;background:linear-gradient(135deg,#4a0080,#7B1FA2);color:#fff;border:none;padding:1rem;border-radius:10px;font-size:1rem;font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:.12em;transition:opacity .2s;margin-top:.5rem}
+.btn:hover{opacity:.9}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+#msgBox{display:none;margin-top:1rem;padding:.85rem 1rem;border-radius:8px;font-size:.9rem;font-weight:600;text-align:center;line-height:1.5}
+#msgBox.ok {background:#082010;border:1.5px solid #4caf50;color:#4caf50;display:block}
+#msgBox.err{background:#200808;border:1.5px solid #f44336;color:#f44336;display:block}
+
+.note{text-align:center;color:#3a5040;font-size:.75rem;margin-top:.85rem;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">🎾</div>
+    <div class="logo-title">Polla <span>Wimbledon</span> 2026</div>
+    <div class="logo-sub">Registro de participantes</div>
+  </div>
+
+  <div class="mb">
+    <label>Nombre completo *</label>
+    <input type="text" id="nombre" placeholder="Escribe tu nombre completo" autocomplete="name">
+  </div>
+  <div class="mb">
+    <label>Correo electrónico *</label>
+    <input type="email" id="email" placeholder="tu@correo.com" inputmode="email" autocomplete="email">
+  </div>
+  <div class="mb">
+    <label>Número de cédula *</label>
+    <input type="text" id="cedula" placeholder="Número de cédula" inputmode="numeric">
+  </div>
+  <div class="mb">
+    <label>Teléfono / WhatsApp *</label>
+    <input type="text" id="telefono" placeholder="Ej: 3001234567" inputmode="tel" autocomplete="tel">
+  </div>
+
+  <button class="btn" id="btnEnviar" onclick="registrar()">Registrarme →</button>
+  <div id="msgBox"></div>
+  <div class="note">Al registrarte quedas inscrito en la Polla Wimbledon 2026 y recibirás acceso a los formularios de pronósticos.</div>
+</div>
+
+<script>
+'use strict';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygrPEPSNgjVVg3L5B2aHvucZPe3Otvb-jjprLGCTkb27P6aqpcLbjzVho_9XYMlO4mrg/exec';
+
+async function registrar() {
+  const nombre   = document.getElementById('nombre').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const cedula   = document.getElementById('cedula').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+
+  if (!nombre || !email || !cedula || !telefono) {
+    showMsg('⚠️ Completa todos los campos para continuar.', 'err'); return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showMsg('⚠️ Ingresa un correo electrónico válido.', 'err'); return;
+  }
+
+  const btn = document.getElementById('btnEnviar');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({
+        formulario: 'Registro',
+        timestamp:  new Date().toISOString(),
+        nombre, email, cedula, telefono,
+      }),
+    });
+    showMsg('✅ ¡Registro exitoso! Bienvenido a la Polla Wimbledon 2026. 🎾', 'ok');
+    btn.textContent = '✅ Registrado';
+  } catch(e) {
+    showMsg('❌ Error al enviar. Verifica tu internet e intenta de nuevo.', 'err');
+    btn.disabled = false; btn.textContent = 'Registrarme →';
+  }
+}
+
+function showMsg(msg, type) {
+  const el = document.getElementById('msgBox');
+  el.textContent = msg; el.className = type;
+}
+</script>
+</body>
+</html>
