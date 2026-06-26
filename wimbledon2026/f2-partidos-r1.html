@@ -162,16 +162,16 @@ const MULT = 4;
 let favoritoN = null; // se carga desde el GAS
 
 const PARTIDOS = [
-  {n:1,  local:'Sinner',       visita:'Kovacevic',    ph:1, pa:5},
-  {n:2,  local:'Zverev',       visita:'Blockx',       ph:2, pa:4},
-  {n:3,  local:'Djokovic',     visita:'Shapovalov',   ph:2, pa:4},
-  {n:4,  local:'Shelton',      visita:'Moutet',       ph:3, pa:3},
-  {n:5,  local:'Fritz',        visita:'Rinderknecht', ph:3, pa:3},
-  {n:6,  local:'Bublik',       visita:'Mensik',       ph:3, pa:3},
-  {n:7,  local:'Fonseca',      visita:'Nakashima',    ph:3, pa:3},
-  {n:8,  local:'De Minaur',    visita:'Mannarino',    ph:2, pa:4},
-  {n:9,  local:'Swiatek',      visita:'Galfi',        ph:1, pa:5},
-  {n:10, local:'Gauff',        visita:'Anisimova',    ph:3, pa:3},
+  {n:1,  local:'Ruud',         visita:'Hurkacz',      ph:4, pa:2},
+  {n:2,  local:'Cilic',        visita:'Medvedev',     ph:4, pa:2},
+  {n:3,  local:'Vallejo',      visita:'Mejia',        ph:2, pa:4},
+  {n:4,  local:'Fritz',        visita:'Draper',       ph:2, pa:4},
+  {n:5,  local:'Tiafoe',       visita:'Atmane',       ph:2, pa:4},
+  {n:6,  local:'Michelsen',    visita:'Fearnley',     ph:3, pa:3},
+  {n:7,  local:'Rublev',       visita:'Safiullin',    ph:2, pa:4},
+  {n:8,  local:'Gasanova',     visita:'Arango',       ph:3, pa:3},
+  {n:9,  local:'Osorio',       visita:'Waltert',      ph:2, pa:4},
+  {n:10, local:'Krueger',      visita:'Vekic',        ph:3, pa:3},
 ];
 
 const picks = {};
@@ -291,7 +291,6 @@ async function submitForm() {
     timestamp:  new Date().toISOString(),
     nombre:     document.getElementById('nombre').value.trim(),
     cedula:     document.getElementById('cedula').value.trim(),
-    favorito:   favoritoN ? 'P' + favoritoN : 'ninguno',
     ...partidosPicks,
   };
 

@@ -60,6 +60,9 @@ input:focus{border-color:#7B1FA2}
 
   <button class="btn" id="btnEnviar" onclick="registrar()">Registrarme →</button>
   <div id="msgBox"></div>
+  <a id="btnJugadores" href="f1-jugadores.html" style="display:none;text-align:center;background:linear-gradient(135deg,#4a0080,#7B1FA2);color:#fff;padding:1rem;border-radius:10px;font-size:1rem;font-weight:900;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;margin-top:.85rem">
+    🎾 Ir a Formulario Jugadores →
+  </a>
   <div class="note">Al registrarte quedas inscrito en la Polla Wimbledon 2026 y recibirás acceso a los formularios de pronósticos.</div>
 </div>
 
@@ -95,6 +98,7 @@ async function registrar() {
     });
     showMsg('✅ ¡Registro exitoso! Bienvenido a la Polla Wimbledon 2026. 🎾', 'ok');
     btn.textContent = '✅ Registrado';
+    document.getElementById('btnJugadores').style.display = 'block';
   } catch(e) {
     showMsg('❌ Error al enviar. Verifica tu internet e intenta de nuevo.', 'err');
     btn.disabled = false; btn.textContent = 'Registrarme →';

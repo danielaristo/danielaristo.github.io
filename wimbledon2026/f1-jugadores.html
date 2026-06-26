@@ -213,6 +213,9 @@ select.dup{border-color:#f44336 !important}
 
     <button class="btn-submit" id="submitBtn" onclick="submitForm()">🎾 Enviar Pronósticos</button>
     <div class="submit-note">Al enviar, tu pronóstico queda registrado oficialmente en la Polla Wimbledon 2026.</div>
+    <a id="btnPartidos" href="f2-partidos-r1.html" style="display:none;text-align:center;background:linear-gradient(135deg,#4a0080,#7B1FA2);color:#fff;padding:1rem;border-radius:10px;font-size:1rem;font-weight:900;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;margin-top:.85rem">
+      🎾 Ir a Formulario Partidos →
+    </a>
   </div>
 
 </div>
@@ -225,17 +228,22 @@ const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbxsPwHMxDQFOJ-9Aso
 
 // ── Entry list — 32 cabezas de serie masculino ────────────────
 const SEEDS = [
-  'Sinner', 'Zverev', 'Djokovic', 'Auger-Aliassime',
-  'Shelton', 'Medvedev', 'Fritz', 'De Minaur',
-  'Bublik', 'Cobolli', 'Rublev', 'Lehecka',
-  'Khachanov', 'Darderi', 'Ruud', 'Fils',
-  'Tien', 'Tiafoe', 'Norrie', 'Davidovich Fokina',
-  'Rinderknecht', 'Etcheverry', 'Paul', 'Cerundolo',
-  'Mensik', 'Jodar', 'Fonseca', 'Griekspoor',
-  'Moutet', 'Nakashima', 'Humbert', 'Tabilo',
+  'Sinner', 'Zverev', 'Auger-Aliassime', 'Shelton',
+  'De Minaur', 'Fritz', 'Djokovic', 'Medvedev',
+  'Cobolli', 'Bublik', 'Ruud', 'Rublev',
+  'Lehecka', 'Darderi', 'Mensik', 'Tien',
+  'Tiafoe', 'Cerundolo F.', 'Khachanov', 'Fils',
+  'Paul', 'Davidovich Fokina', 'Jodar', 'Fonseca',
+  'Rinderknech', 'Norrie', 'Humbert', 'Nakashima',
+  'Etcheverry', 'Tabilo', 'Buse', 'Arnaldi',
 ];
 
-const TOP10 = SEEDS.slice(0, 10);
+// Jugador Desastre: primeros 10 del Entry List oficial (orden de ranking, no de
+// las cabezas de serie del cuadro — son listas distintas).
+const TOP10 = [
+  'Sinner', 'Zverev', 'Djokovic', 'Auger-Aliassime', 'Shelton',
+  'Medvedev', 'Fritz', 'De Minaur', 'Bublik', 'Cobolli',
+];
 
 const SEEDS_F = [
   'Sabalenka', 'Rybakina', 'Swiatek', 'Pegula',
@@ -412,6 +420,7 @@ async function submitForm() {
     });
     showAlert('✅ ¡Pronósticos enviados exitosamente! Tu participación quedó registrada. ¡Mucha suerte! 🎾', 'success');
     btn.textContent = '✅ Enviado';
+    document.getElementById('btnPartidos').style.display = 'block';
   } catch(e) {
     showAlert('❌ Error al enviar. Verifica tu internet e intenta de nuevo.', 'error');
     btn.disabled = false; btn.textContent = '🎾 Enviar Pronósticos';
