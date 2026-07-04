@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polla Wimbledon 2026 — Partidos Octavos de Final</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050f08;color:#e8f5e9;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh}
+
+header{background:linear-gradient(135deg,#001a00 0%,#0d0020 100%);border-bottom:3px solid #7B1FA2;padding:2rem 1rem;text-align:center}
+.logo{font-size:clamp(1.6rem,5vw,2.8rem);font-weight:900;letter-spacing:.08em;color:#fff}
+.logo span{color:#CE93D8}
+.subtitle{margin-top:.4rem;color:#81C784;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.22em}
+.form-desc{margin-top:.5rem;color:#5a8060;font-size:.78rem}
+
+.container{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem}
+
+/* Gate */
+.gate-card{background:#0c150e;border:2px solid #7B1FA2;border-radius:14px;padding:2rem 1.5rem;max-width:420px;margin:2rem auto}
+.gate-title{font-size:1.05rem;font-weight:900;color:#fff;text-align:center;margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.1em}
+.gate-sub{font-size:.82rem;color:#5a8060;text-align:center;margin-bottom:1.4rem;line-height:1.5}
+.gate-row{display:flex;gap:.6rem}
+.gate-row input{flex:1;background:#0d1a0f;border:1.5px solid #2a1a3a;color:#e8f5e9;padding:.8rem 1rem;border-radius:8px;font-size:.95rem;outline:none;transition:border-color .2s}
+.gate-row input:focus{border-color:#7B1FA2}
+.btn-verify{background:linear-gradient(135deg,#4a0080,#7B1FA2);color:#fff;border:none;padding:.8rem 1.3rem;border-radius:8px;font-weight:900;font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;white-space:nowrap;transition:opacity .2s}
+.btn-verify:hover{opacity:.85}
+.btn-verify:disabled{opacity:.4;cursor:not-allowed}
+#gateError{display:none;margin-top:.85rem;padding:.7rem 1rem;background:#200808;border:1.5px solid #f44336;border-radius:8px;color:#f44336;font-size:.85rem;font-weight:600;text-align:center}
+
+#yaEnvioBox{display:none;background:#08200e;border:1.5px solid #4caf50;border-radius:14px;padding:2rem 1.5rem;max-width:420px;margin:2rem auto;text-align:center}
+
+#mainForm{display:none}
+#alertBox{display:none;padding:1rem 1.25rem;border-radius:10px;margin-bottom:1.25rem;font-weight:600;font-size:.93rem;line-height:1.5}
+#alertBox.success{background:#082010;border:1.5px solid #4caf50;color:#4caf50;display:block}
+#alertBox.error{background:#200808;border:1.5px solid #f44336;color:#f44336;display:block}
+
+/* Ronda info */
+.ronda-banner{background:#0c150e;border:1.5px solid #7B1FA2;border-radius:12px;padding:.9rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.ronda-name{font-weight:900;font-size:1rem;color:#fff;text-transform:uppercase;letter-spacing:.1em}
+.ronda-mult{background:#1a0033;border:1px solid #7B1FA2;border-radius:20px;padding:.3rem .9rem;font-size:.8rem;font-weight:800;color:#CE93D8}
+.ronda-hint{font-size:.78rem;color:#5a8060;margin-top:.3rem;width:100%}
+
+/* Match cards */
+.matches-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem}
+@media(max-width:600px){.matches-grid{grid-template-columns:1fr}}
+
+.match-card{background:#0c150e;border:1px solid #1a2e1c;border-radius:12px;overflow:hidden}
+.match-card.favorito{border-color:#f9a825;box-shadow:0 0 12px rgba(249,168,37,.15)}
+
+.match-head{background:#111e13;border-bottom:1.5px solid #1a2e1c;padding:.6rem .9rem;display:flex;align-items:center;justify-content:space-between}
+.match-card.favorito .match-head{background:#1a1400;border-bottom-color:#f9a825}
+.match-num{font-size:.65rem;font-weight:800;color:#CE93D8;text-transform:uppercase;letter-spacing:.08em}
+.fav-badge{background:#f9a825;color:#000;font-size:.58rem;font-weight:900;padding:.15rem .5rem;border-radius:20px;letter-spacing:.05em}
+.mult-badge{background:#1a0033;border:1px solid #7B1FA2;color:#CE93D8;font-size:.58rem;font-weight:800;padding:.15rem .5rem;border-radius:20px}
+
+.match-pts{font-size:.68rem;color:#5a8060;text-align:center;padding:.35rem .9rem;border-bottom:1px solid #0d1a0f}
+.match-pts .ph{color:#81C784;font-weight:700}
+.match-pts .pa{color:#CE93D8;font-weight:700}
+
+.match-picks{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.pick-btn{background:none;border:none;padding:.9rem .5rem;cursor:pointer;text-align:center;transition:background .15s;border-top:none}
+.pick-btn:first-child{border-right:1px solid #1a2e1c}
+.pick-btn .p-name{display:block;font-size:.82rem;font-weight:800;color:#e8f5e9;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.2rem}
+.pick-btn .p-pts{display:block;font-size:.68rem;color:#5a8060;font-weight:600}
+.pick-btn:hover{background:#111e13}
+.pick-btn.selected-home{background:#082010 !important;border-bottom:2px solid #4caf50}
+.pick-btn.selected-home .p-name{color:#4caf50}
+.pick-btn.selected-away{background:#200808 !important;border-bottom:2px solid #f44336}
+.pick-btn.selected-away .p-name{color:#f44336}
+
+label{display:block;color:#CE93D8;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.4rem}
+input[type=text]{width:100%;background:#0d1a0f;border:1.5px solid #1a3020;color:#e8f5e9;padding:.8rem 1rem;border-radius:8px;font-size:.95rem;outline:none;-webkit-appearance:none}
+input[type=text]:focus{border-color:#7B1FA2}
+
+.card{background:#0c150e;border:1px solid #1a2e1c;border-radius:14px;margin-bottom:1.5rem;overflow:hidden}
+.card-header{background:#111e13;border-bottom:2px solid #7B1FA2;padding:.9rem 1.25rem;display:flex;align-items:center;gap:.75rem}
+.card-num{background:#7B1FA2;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.82rem;flex-shrink:0}
+.card-title{font-weight:800;font-size:.95rem;text-transform:uppercase;letter-spacing:.1em;color:#fff}
+.card-body{padding:1.25rem}
+.mb{margin-bottom:1rem}
+
+.btn-submit{width:100%;background:linear-gradient(135deg,#4a0080,#7B1FA2);color:#fff;border:none;padding:1.1rem;border-radius:10px;font-size:1rem;font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:.12em;transition:opacity .2s;margin-top:.5rem}
+.btn-submit:hover{opacity:.9}
+.btn-submit:disabled{opacity:.45;cursor:not-allowed}
+.submit-note{text-align:center;color:#3a5040;font-size:.75rem;margin-top:.75rem;line-height:1.5}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🎾 Polla <span>Wimbledon</span> 2026</div>
+  <div class="subtitle">Formulario 7 — Partidos Octavos de Final</div>
+  <div class="form-desc">Selecciona el ganador de cada partido antes del inicio de la ronda</div>
+</header>
+
+<div class="container">
+
+  <div id="yaEnvioBox">
+    <div style="font-size:2.5rem;margin-bottom:.75rem">✅</div>
+    <div style="font-weight:900;font-size:1.1rem;color:#4caf50;margin-bottom:.5rem">¡Ya enviaste tus pronósticos!</div>
+    <div style="color:#5a8060;font-size:.85rem;line-height:1.6">Tu pronóstico de partidos de octavos de final ya está registrado. ¡Mucha suerte! 🎾</div>
+  </div>
+
+  <!-- Gate -->
+  <div id="gateWrap">
+    <div class="gate-card">
+      <div class="gate-title">🔒 Verificación</div>
+      <div class="gate-sub">Ingresa tu cédula para acceder al formulario de partidos.</div>
+      <div class="gate-row">
+        <input type="text" id="gateCedula" placeholder="Número de cédula" inputmode="numeric"
+          onkeydown="if(event.key==='Enter') verificar()">
+        <button class="btn-verify" id="btnVerify" onclick="verificar()">Verificar</button>
+      </div>
+      <div id="gateError"></div>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <div id="mainForm">
+    <div id="alertBox"></div>
+
+    <!-- Datos -->
+    <div class="card">
+      <div class="card-header"><div class="card-num">1</div><div class="card-title">Tus Datos</div></div>
+      <div class="card-body">
+        <div class="mb">
+          <label>Nombre completo</label>
+          <input type="text" id="nombre" readonly style="opacity:.7;cursor:default">
+        </div>
+        <div class="mb">
+          <label>Cédula</label>
+          <input type="text" id="cedula" readonly style="opacity:.7;cursor:default">
+        </div>
+      </div>
+    </div>
+
+    <!-- Partidos -->
+    <div class="ronda-banner">
+      <div>
+        <div class="ronda-name">🎾 Octavos de Final</div>
+        <div class="ronda-hint">Selecciona el ganador de cada partido. El partido ⭐ Favorito suma el doble de puntos.</div>
+      </div>
+      <span class="ronda-mult">Multiplicador ×7</span>
+    </div>
+
+    <div class="matches-grid" id="matchesGrid"></div>
+
+    <button class="btn-submit" id="submitBtn" onclick="submitForm()">🎾 Enviar Pronósticos</button>
+    <div class="submit-note">Al enviar, tu pronóstico queda registrado oficialmente en la Polla Wimbledon 2026.</div>
+  </div>
+
+</div>
+
+<script>
+'use strict';
+
+const REGISTRO_URL = 'https://script.google.com/macros/s/AKfycbygrPEPSNgjVVg3L5B2aHvucZPe3Otvb-jjprLGCTkb27P6aqpcLbjzVho_9XYMlO4mrg/exec';
+const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbxS9ftPZcZNx1HswO_-PwhdoyY-d_ekTHY2XGnDehw77GiZvC2BSQrmpMKQnG0cgWbI/exec';
+
+const MULT = 7;
+let favoritoN = null;
+
+const PARTIDOS = [
+  {n:31, local:'Struff',           visita:'Hurkacz',            ph:4, pa:2},
+  {n:32, local:'Auger-Aliassime',  visita:'Davidovich Fokina',  ph:2, pa:4},
+  {n:33, local:'Safiullin',        visita:'Djokovic',           ph:2, pa:4},
+  {n:34, local:'Bencic',           visita:'Gauff',               ph:3, pa:3},
+];
+
+const picks = {};
+
+function renderMatches() {
+  const grid = document.getElementById('matchesGrid');
+  grid.innerHTML = PARTIDOS.map(p => {
+    const fav = favoritoN && p.n === favoritoN;
+    const ph  = fav ? p.ph * 2 : p.ph;
+    const pa  = fav ? p.pa * 2 : p.pa;
+    return `
+    <div class="match-card${fav ? ' favorito' : ''}" id="mc_${p.n}">
+      <div class="match-head">
+        <span class="match-num">Partido ${p.n}</span>
+        ${fav ? '<span class="fav-badge">⭐ Favorito</span>' : `<span class="mult-badge">×${MULT}</span>`}
+      </div>
+      <div class="match-pts">
+        <span class="ph">${p.local}: ${ph} pts</span>
+        &nbsp;·&nbsp;
+        <span class="pa">${p.visita}: ${pa} pts</span>
+        ${fav ? ' <span style="color:#f9a825;font-size:.6rem;font-weight:800">(×2)</span>' : ''}
+      </div>
+      <div class="match-picks">
+        <button class="pick-btn" id="pb_${p.n}_h" onclick="pick(${p.n},'h')">
+          <span class="p-name">${p.local}</span>
+          <span class="p-pts">${ph} pts</span>
+        </button>
+        <button class="pick-btn" id="pb_${p.n}_a" onclick="pick(${p.n},'a')">
+          <span class="p-name">${p.visita}</span>
+          <span class="p-pts">${pa} pts</span>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function pick(n, side) {
+  picks[n] = side;
+  const pb_h = document.getElementById('pb_'+n+'_h');
+  const pb_a = document.getElementById('pb_'+n+'_a');
+  pb_h.className = 'pick-btn' + (side==='h' ? ' selected-home' : '');
+  pb_a.className = 'pick-btn' + (side==='a' ? ' selected-away' : '');
+}
+
+async function verificar() {
+  const cedula = document.getElementById('gateCedula').value.trim();
+  const errEl  = document.getElementById('gateError');
+  const btn    = document.getElementById('btnVerify');
+
+  if (!cedula) { mostrarError('Ingresa tu número de cédula.'); return; }
+  btn.disabled = true; btn.textContent = 'Verificando...';
+  errEl.style.display = 'none';
+
+  try {
+    const res  = await fetch(REGISTRO_URL + '?cedula=' + encodeURIComponent(cedula));
+    const data = await res.json();
+
+    if (!data.registrado) {
+      mostrarError('No encontramos tu cédula. Primero completa el formulario de registro.');
+      btn.disabled = false; btn.textContent = 'Verificar'; return;
+    }
+
+    try {
+      const chk  = await fetch(SCRIPT_URL + '?cedula=' + encodeURIComponent(cedula));
+      const chkD = await chk.json();
+      if (chkD.yaEnvio) {
+        document.getElementById('gateWrap').style.display  = 'none';
+        document.getElementById('yaEnvioBox').style.display = 'block';
+        return;
+      }
+    } catch(e) {}
+
+    try {
+      const cfgRes = await fetch(SCRIPT_URL + '?type=config');
+      const cfg    = await cfgRes.json();
+      if (cfg.favorito) favoritoN = parseInt(cfg.favorito.replace('P',''));
+    } catch(e) {}
+
+    document.getElementById('gateWrap').style.display = 'none';
+    document.getElementById('mainForm').style.display = 'block';
+    document.getElementById('nombre').value = data.nombre || '';
+    document.getElementById('cedula').value = cedula;
+    renderMatches();
+
+  } catch(e) {
+    mostrarError('Error de conexión. Verifica tu internet e intenta de nuevo.');
+    btn.disabled = false; btn.textContent = 'Verificar';
+  }
+}
+
+function mostrarError(msg) {
+  const el = document.getElementById('gateError');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+async function submitForm() {
+  const incompletos = PARTIDOS.filter(p => !picks[p.n]);
+  if (incompletos.length) {
+    showAlert('⚠️ Faltan ' + incompletos.length + ' partido(s) por seleccionar.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+
+  const partidosPicks = {};
+  PARTIDOS.forEach(p => {
+    const ganador = picks[p.n] === 'h' ? p.local : p.visita;
+    partidosPicks['P' + p.n] = ganador;
+  });
+
+  const payload = {
+    formulario: 'Formulario 7 - Partidos Octavos',
+    timestamp:  new Date().toISOString(),
+    nombre:     document.getElementById('nombre').value.trim(),
+    cedula:     document.getElementById('cedula').value.trim(),
+    ...partidosPicks,
+  };
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify(payload),
+    });
+    showAlert('✅ ¡Pronósticos enviados! Buena suerte en octavos de final. 🎾', 'success');
+    btn.textContent = '✅ Enviado';
+  } catch(e) {
+    showAlert('❌ Error al enviar. Verifica tu internet e intenta de nuevo.', 'error');
+    btn.disabled = false; btn.textContent = '🎾 Enviar Pronósticos';
+  }
+}
+
+function showAlert(msg, type) {
+  const el = document.getElementById('alertBox');
+  el.textContent = msg; el.className = type;
+  el.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+</script>
+</body>
+</html>
