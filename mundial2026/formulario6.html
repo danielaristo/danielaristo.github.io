@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polla Mundial 2026 — Formulario 6</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#080e0a;color:#e8f0ea;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh}
+header{background:linear-gradient(160deg,#071209 0%,#0f2116 60%,#0c1a10 100%);border-bottom:3px solid #c9a227;padding:2rem 1rem;text-align:center}
+.logo{font-size:clamp(2rem,6vw,3.5rem);font-weight:900;letter-spacing:.06em;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.logo span{color:#c9a227}
+.subtitle{margin-top:.5rem;color:#c9a227;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.25em}
+.organizer{margin-top:.75rem;color:#5a8060;font-size:.78rem}
+.container{max-width:960px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.deadline{background:linear-gradient(135deg,#1f1000,#2a1800);border:1.5px solid #c9a227;border-radius:10px;padding:.85rem 1.25rem;text-align:center;margin-bottom:1.5rem;font-size:.88rem}
+.deadline strong{color:#c9a227;font-size:1rem}
+#alertBox{display:none;padding:1rem 1.25rem;border-radius:10px;margin-bottom:1.25rem;font-weight:600;font-size:.93rem;line-height:1.5}
+#alertBox.success{background:#082010;border:1.5px solid #4caf50;color:#4caf50;display:block}
+#alertBox.error{background:#200808;border:1.5px solid #f44336;color:#f44336;display:block}
+.card{background:#0c1710;border:1px solid #1c3020;border-radius:14px;margin-bottom:1.5rem;overflow:hidden}
+.card-header{background:#112018;border-bottom:2px solid #c9a227;padding:.9rem 1.25rem;display:flex;align-items:center;gap:.75rem}
+.card-num{background:#c9a227;color:#000;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.82rem;flex-shrink:0}
+.card-title{font-weight:800;font-size:.95rem;text-transform:uppercase;letter-spacing:.1em}
+.card-sub{margin-left:auto;color:#5a8060;font-size:.78rem}
+.card-body{padding:1.25rem}
+label{display:block;color:#c9a227;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.4rem}
+input[type=text]{width:100%;background:#0f1e14;border:1.5px solid #1c3020;color:#e8f0ea;padding:.8rem 1rem;border-radius:8px;font-size:.95rem;outline:none;transition:border-color .2s;-webkit-appearance:none}
+input[type=text]:focus{border-color:#c9a227}
+.mb{margin-bottom:1rem}
+
+.matches-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+@media(max-width:640px){.matches-grid{grid-template-columns:1fr}}
+
+.match-card{background:#091510;border:1px solid #1c3020;border-radius:10px;overflow:hidden}
+.match-head{background:#0e1c12;border-bottom:1.5px solid #1c3020;padding:.55rem .85rem;display:flex;align-items:center;justify-content:center}
+.match-num{font-size:.65rem;font-weight:800;color:#c9a227;text-transform:uppercase;letter-spacing:.08em}
+.match-pts{font-size:.6rem;color:#5a8060;text-align:center;padding:.3rem .85rem;border-bottom:1px solid #0f1e14}
+.match-pts .ph{color:#4caf50;font-weight:700}
+.match-pts .pd{color:#c9a227;font-weight:700}
+.match-pts .pa{color:#e05050;font-weight:700}
+
+.match-body{padding:.75rem .85rem}
+.teams-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.6rem}
+.team{flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.team-flag{font-size:1.6rem;line-height:1}
+.team-name{font-size:.65rem;font-weight:700;text-align:center;color:#e8f0ea;line-height:1.2}
+.vs-col{display:flex;flex-direction:column;align-items:center;gap:.25rem;flex-shrink:0}
+.vs-label{font-size:.7rem;font-weight:900;color:#2a4030;text-transform:uppercase}
+.score-display{font-size:1.1rem;font-weight:900;color:#c9a227;letter-spacing:.05em;min-width:50px;text-align:center}
+
+.score-btns{display:flex;flex-direction:column;align-items:center;gap:.25rem}
+.score-row{display:flex;gap:.25rem}
+.sbtn{width:28px;height:28px;background:#0f1e14;border:1.5px solid #1c3020;color:#7a9e80;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.sbtn:hover{border-color:#c9a227;color:#c9a227}
+.sbtn.sel{background:#1a3a1a;border-color:#c9a227;color:#c9a227}
+
+.match-result{text-align:center;padding:.4rem .5rem;font-size:.65rem;font-weight:700;border-radius:6px;margin-top:.4rem;background:#0f1e14;color:#2a4030;transition:all .3s}
+.match-result.win-h{background:#082010;color:#4caf50}
+.match-result.draw{background:#1a1400;color:#c9a227}
+.match-result.win-a{background:#200808;color:#e05050}
+
+@media(max-width:440px){
+  .match-body{padding:.6rem .5rem}
+  .teams-row{gap:.2rem}
+  .score-display{min-width:36px;font-size:.95rem}
+  .sbtn{width:23px;height:23px;font-size:.68rem}
+  .score-row{gap:.12rem}
+  .score-btns{gap:.12rem}
+  .match-pts{white-space:normal;line-height:1.4;padding:.3rem .5rem}
+  .team-flag{font-size:1.35rem}
+  .team-name{font-size:.6rem}
+}
+
+.btn-submit{width:100%;background:linear-gradient(135deg,#c9a227,#a07c10);color:#000;border:none;padding:1.1rem;border-radius:10px;font-size:1rem;font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:.12em;transition:opacity .2s;margin-top:.5rem}
+.btn-submit:hover{opacity:.9}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">POLLA <span>MUNDIAL</span> 2026</div>
+  <div class="subtitle">Formulario 6 — Octavos de Final</div>
+  <div class="organizer">Daniel Aristizábal · 3146306028</div>
+</header>
+
+<div class="container">
+  <div class="deadline">⏰ Fecha límite: <strong>antes del inicio de la ronda de Octavos de Final</strong></div>
+  <div id="alertBox"></div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">1</div>
+      <div class="card-title">Tus Datos</div>
+    </div>
+    <div class="card-body">
+      <div class="mb">
+        <label>Nombre Completo *</label>
+        <input type="text" id="nombre" placeholder="Escribe tu nombre completo">
+      </div>
+      <div>
+        <label>Número de Celular *</label>
+        <input type="text" id="celular" placeholder="Ej: 3001234567">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">2</div>
+      <div class="card-title">Partidos — Octavos de Final</div>
+      <div class="card-sub" id="cnt-partidos">0 / 8</div>
+    </div>
+    <div class="card-body">
+      <div style="background:#091510;border-left:3px solid #c9a227;border-radius:0 6px 6px 0;padding:.7rem 1rem;margin-bottom:1.25rem;font-size:.8rem;color:#7a9e80;line-height:1.55">
+        <strong style="color:#c9a227">¿Cómo funciona?</strong> Selecciona el marcador de cada partido (resultado al final del tiempo reglamentario). Los puntos entre paréntesis indican cuánto ganas según el resultado: <strong style="color:#4caf50">Local</strong> · <strong style="color:#c9a227">Empate</strong> · <strong style="color:#e05050">Visitante</strong>.
+      </div>
+      <div class="matches-grid" id="matchesGrid"></div>
+    </div>
+  </div>
+
+  <button class="btn-submit" id="submitBtn" onclick="submitForm()">🏆 Enviar Pronósticos</button>
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFeK0pvHJanVMIHJHJpyecZqGECytZjbe7GkKphbwDqTI8nNLYNT7d-H9iFR7kcJNtng/exec';
+
+const MATCHES = [
+  {n:89, home:{t:'Canadá',         f:'🇨🇦'}, away:{t:'Marruecos',      f:'🇲🇦'}, ph:4, pd:3, pa:2},
+  {n:90, home:{t:'Paraguay',       f:'🇵🇾'}, away:{t:'Francia',        f:'🇫🇷'}, ph:5, pd:4, pa:1},
+  {n:91, home:{t:'Brasil',         f:'🇧🇷'}, away:{t:'Noruega',        f:'🇳🇴'}, ph:2, pd:3, pa:4},
+  {n:92, home:{t:'México',         f:'🇲🇽'}, away:{t:'Inglaterra',     f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'}, ph:4, pd:3, pa:2},
+  {n:93, home:{t:'Portugal',       f:'🇵🇹'}, away:{t:'España',         f:'🇪🇸'}, ph:4, pd:3, pa:2},
+  {n:94, home:{t:'Estados Unidos', f:'🇺🇸'}, away:{t:'Bélgica',        f:'🇧🇪'}, ph:3, pd:3, pa:3},
+  {n:95, home:{t:'Argentina',      f:'🇦🇷'}, away:{t:'Egipto',         f:'🇪🇬'}, ph:1, pd:4, pa:5},
+  {n:96, home:{t:'Colombia',       f:'🇨🇴'}, away:{t:'Suiza',          f:'🇨🇭'}, ph:2, pd:3, pa:4},
+];
+
+const scores = {};
+MATCHES.forEach(m => scores[m.n] = {h: null, a: null});
+
+function scoreRows(matchN, side) {
+  const rows = [[0,1,2,3],[4,5]];
+  return rows.map(row =>
+    `<div class="score-row">${row.map(g =>
+      `<button class="sbtn" id="sb_${matchN}_${side}_${g}" onclick="pick(${matchN},'${side}',${g})">${g}</button>`
+    ).join('')}</div>`
+  ).join('');
+}
+
+function buildMatches() {
+  const grid = document.getElementById('matchesGrid');
+  grid.innerHTML = MATCHES.map(m => `
+    <div class="match-card" id="mc_${m.n}">
+      <div class="match-head">
+        <span class="match-num">Partido ${m.n}</span>
+      </div>
+      <div class="match-pts">
+        <span class="ph">${m.home.t} (${m.ph} pts)</span>
+        <span style="color:#2a4030"> · </span>
+        <span class="pd">Empate (${m.pd} pts)</span>
+        <span style="color:#2a4030"> · </span>
+        <span class="pa">${m.away.t} (${m.pa} pts)</span>
+      </div>
+      <div class="match-body">
+        <div class="teams-row">
+          <div class="team">
+            <div class="team-flag">${m.home.f}</div>
+            <div class="team-name">${m.home.t}</div>
+            <div class="score-btns">${scoreRows(m.n,'h')}</div>
+          </div>
+          <div class="vs-col">
+            <div class="vs-label">VS</div>
+            <div class="score-display" id="sd_${m.n}">–</div>
+          </div>
+          <div class="team">
+            <div class="team-flag">${m.away.f}</div>
+            <div class="team-name">${m.away.t}</div>
+            <div class="score-btns">${scoreRows(m.n,'a')}</div>
+          </div>
+        </div>
+        <div class="match-result" id="mr_${m.n}">Selecciona el marcador</div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+function pick(matchN, side, goal) {
+  const m = MATCHES.find(x => x.n === matchN);
+  const prev = scores[matchN][side];
+  if (prev === goal) {
+    scores[matchN][side] = null;
+  } else {
+    if (prev !== null) document.getElementById(`sb_${matchN}_${side}_${prev}`)?.classList.remove('sel');
+    scores[matchN][side] = goal;
+  }
+  document.getElementById(`sb_${matchN}_${side}_${goal}`)?.classList.toggle('sel', scores[matchN][side] === goal);
+  updateCard(matchN, m);
+  updateCounter();
+}
+
+function updateCard(matchN, m) {
+  const {h, a} = scores[matchN];
+  const sd = document.getElementById(`sd_${matchN}`);
+  const mr = document.getElementById(`mr_${matchN}`);
+  if (h === null && a === null) {
+    sd.textContent = '–'; mr.textContent = 'Selecciona el marcador'; mr.className = 'match-result';
+  } else if (h === null || a === null) {
+    sd.textContent = h !== null ? `${h} – ?` : `? – ${a}`; mr.textContent = 'Falta un marcador'; mr.className = 'match-result';
+  } else {
+    sd.textContent = `${h} – ${a}`;
+    if (h > a)      { mr.textContent = `🏠 Gana ${m.home.t} — ${m.ph} pts`; mr.className = 'match-result win-h'; }
+    else if (h===a) { mr.textContent = `🤝 Empate — ${m.pd} pts`;            mr.className = 'match-result draw';  }
+    else            { mr.textContent = `✈️ Gana ${m.away.t} — ${m.pa} pts`;  mr.className = 'match-result win-a'; }
+  }
+}
+
+function updateCounter() {
+  const done = MATCHES.filter(m => scores[m.n].h !== null && scores[m.n].a !== null).length;
+  const el = document.getElementById('cnt-partidos');
+  if (el) { el.textContent = `${done} / 8`; el.style.color = done === 8 ? '#4caf50' : '#5a8060'; }
+}
+
+function showAlert(msg, type) {
+  const el = document.getElementById('alertBox');
+  el.textContent = msg; el.className = type;
+  el.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+async function submitForm() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const celular = document.getElementById('celular').value.trim();
+  const errs = [];
+  if (!nombre) errs.push('Escribe tu nombre completo.');
+  if (!celular) errs.push('Escribe tu número de celular.');
+  const incomplete = MATCHES.filter(m => scores[m.n].h === null || scores[m.n].a === null);
+  if (incomplete.length > 0) errs.push(`Faltan ${incomplete.length} partido(s) por completar.`);
+  if (errs.length) { showAlert('⚠️ ' + errs[0], 'error'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+
+  const partidos = {};
+  MATCHES.forEach(m => { partidos[`P${m.n}`] = `${scores[m.n].h}-${scores[m.n].a}`; });
+
+  const payload = {
+    formulario: 'Formulario 6 - Octavos de Final',
+    timestamp:  new Date().toISOString(),
+    nombre, celular, partidos,
+  };
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify(payload)
+    });
+    showAlert('✅ ¡Pronósticos enviados exitosamente! Ya estás en la Polla Mundial 2026. ¡Mucha suerte! 🏆', 'success');
+    btn.textContent = '✅ Enviado';
+  } catch(e) {
+    showAlert('❌ Error al enviar. Intenta de nuevo.', 'error');
+    btn.disabled = false; btn.textContent = '🏆 Enviar Pronósticos';
+  }
+}
+
+buildMatches();
+</script>
+</body>
+</html>
