@@ -92,6 +92,11 @@ select.dup{border-color:#f44336 !important}
 
 <div class="container">
 
+  <!-- Enlace a Formulario 2 -->
+  <a href="f2-partidos-r1.html" style="display:block;background:#0a1830;border:1.5px solid #1E88E5;border-radius:10px;padding:.9rem 1.25rem;text-align:center;margin-bottom:1.25rem;text-decoration:none;color:#fff;font-weight:700;font-size:.9rem;letter-spacing:.05em">
+    🎾 ¿Ya llenaste el Formulario 1? → Ir al Formulario 2 — Partidos Ronda 1
+  </a>
+
   <!-- Ya envió -->
   <div id="yaEnvioBox">
     <div style="font-size:2.5rem;margin-bottom:.75rem">✅</div>
@@ -213,6 +218,9 @@ select.dup{border-color:#f44336 !important}
 
     <button class="btn-submit" id="submitBtn" onclick="submitForm()">🎾 Enviar Pronósticos</button>
     <div class="submit-note">Al enviar, tu pronóstico queda registrado oficialmente en la Polla US Open 2026.</div>
+    <a id="btnPartidos" href="f2-partidos-r1.html" style="display:none;text-align:center;background:linear-gradient(135deg,#0d3a66,#1E88E5);color:#fff;padding:1rem;border-radius:10px;font-size:1rem;font-weight:900;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;margin-top:.85rem">
+      🎾 Ir a Formulario Partidos →
+    </a>
   </div>
 
 </div>
@@ -416,6 +424,7 @@ async function submitForm() {
     });
     showAlert('✅ ¡Pronósticos enviados exitosamente! Tu participación quedó registrada. ¡Mucha suerte! 🎾', 'success');
     btn.textContent = '✅ Enviado';
+    document.getElementById('btnPartidos').style.display = 'block';
   } catch(e) {
     showAlert('❌ Error al enviar. Verifica tu internet e intenta de nuevo.', 'error');
     btn.disabled = false; btn.textContent = '🎾 Enviar Pronósticos';
