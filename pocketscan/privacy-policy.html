@@ -1,0 +1,534 @@
+<title>PocketScan Privacy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F6F7F9;
+    --surface: #FFFFFF;
+    --surface-alt: #EEF1F3;
+    --text: #14181C;
+    --text-muted: #5B6570;
+    --border: #E2E6EA;
+    --accent: #0F766E;
+    --accent-soft: #CCEAE6;
+    --accent-amber: #B45309;
+    --accent-amber-soft: #FCE8CF;
+    --focus: #0F766E;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1412;
+      --surface: #101B19;
+      --surface-alt: #15211E;
+      --text: #E9F2F0;
+      --text-muted: #93A8A3;
+      --border: #1F302C;
+      --accent: #2DD4BF;
+      --accent-soft: #123B36;
+      --accent-amber: #F2A340;
+      --accent-amber-soft: #3A2711;
+      --focus: #2DD4BF;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0B1412;
+    --surface: #101B19;
+    --surface-alt: #15211E;
+    --text: #E9F2F0;
+    --text-muted: #93A8A3;
+    --border: #1F302C;
+    --accent: #2DD4BF;
+    --accent-soft: #123B36;
+    --accent-amber: #F2A340;
+    --accent-amber-soft: #3A2711;
+    --focus: #2DD4BF;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+  }
+
+  /* ---------- header ---------- */
+
+  header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-bottom: 2.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .mark-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mark {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 8px;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  h1 {
+    font-family: "Sora", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .updated {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .lang-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+  }
+
+  .lang-toggle button {
+    appearance: none;
+    border: none;
+    background: var(--surface);
+    color: var(--text-muted);
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: 0.04em;
+  }
+
+  .lang-toggle button + button { border-left: 1px solid var(--border); }
+
+  .lang-toggle button[aria-pressed="true"] {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ---------- summary callout ---------- */
+
+  .summary {
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 2.75rem;
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .summary .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 0.55rem;
+    flex-shrink: 0;
+  }
+
+  .summary p {
+    margin: 0;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ---------- sections ---------- */
+
+  section {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: 0.25rem 1rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .sec-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    padding-top: 0.2rem;
+  }
+
+  section h2 {
+    grid-column: 2;
+    font-family: "Sora", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+  }
+
+  section p, section ul {
+    grid-column: 2;
+    color: var(--text-muted);
+    margin: 0 0 0.6rem;
+    max-width: 62ch;
+  }
+
+  section p:last-child, section ul:last-child { margin-bottom: 0; }
+
+  section ul { padding-left: 1.1rem; }
+  section li { margin-bottom: 0.35rem; }
+
+  .note {
+    font-size: 0.92rem;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem;
+  }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  footer a { color: var(--text-muted); }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 480px) {
+    section { grid-template-columns: 1fr; }
+    .sec-num { grid-row: 1; }
+    section h2, section p, section ul { grid-column: 1; }
+  }
+</style>
+
+<div class="page">
+
+  <header>
+    <div class="mark-row">
+      <svg class="mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0F766E"/>
+        <path d="M20 12 H38 L48 22 V50 A3 3 0 0 1 45 53 H20 A3 3 0 0 1 17 50 V15 A3 3 0 0 1 20 12 Z" fill="#FFFFFF"/>
+        <path d="M38 12 L48 22 H40 A2 2 0 0 1 38 20 Z" fill="#CFE0DD"/>
+        <rect x="15" y="30" width="34" height="4" rx="2" fill="#F7C374"/>
+      </svg>
+      <span class="eyebrow">PocketScan &middot; Legal</span>
+    </div>
+
+    <h1>
+      <span class="lang-block" data-lang="es">Política de Privacidad</span>
+      <span class="lang-block" data-lang="en" hidden>Privacy Policy</span>
+      <span class="lang-block" data-lang="fr" hidden>Politique de Confidentialité</span>
+      <span class="lang-block" data-lang="de" hidden>Datenschutzrichtlinie</span>
+    </h1>
+
+    <div class="meta-row">
+      <span class="updated">
+        <span class="lang-block" data-lang="es">Última actualización: 28 de agosto de 2026</span>
+        <span class="lang-block" data-lang="en" hidden>Last updated: August 28, 2026</span>
+        <span class="lang-block" data-lang="fr" hidden>Dernière mise à jour : 28 août 2026</span>
+        <span class="lang-block" data-lang="de" hidden>Zuletzt aktualisiert: 28. August 2026</span>
+      </span>
+      <div class="lang-toggle" role="group" aria-label="Language / Idioma">
+        <button type="button" data-set-lang="es" aria-pressed="true">ES</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-set-lang="fr" aria-pressed="false">FR</button>
+        <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ SPANISH ============ -->
+  <div class="lang-block" data-lang="es">
+
+    <div class="summary">
+      <span class="dot"></span>
+      <p>En una frase: PocketScan no recopila, almacena ni transmite ningún dato personal. Todo el procesamiento — escanear, recortar, aplicar filtros y generar el PDF — ocurre únicamente en tu dispositivo.</p>
+    </div>
+
+    <section>
+      <span class="sec-num">§1</span>
+      <h2>Qué información recopilamos</h2>
+      <p>Ninguna. PocketScan no requiere crear una cuenta, no incluye herramientas de analítica ni rastreadores de terceros, y no envía datos a ningún servidor propio. Escanear documentos, recortarlos, aplicar filtros y generar el PDF final se ejecuta completamente de forma local en tu teléfono, incluso sin conexión a internet.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§2</span>
+      <h2>Compras dentro de la app</h2>
+      <p>Premium se desbloquea con una compra única de USD 4.99, procesada íntegramente por Apple (App Store). PocketScan nunca ve, recibe ni almacena tu información de pago — esa transacción queda a cargo de Apple, bajo su propia política de privacidad.</p>
+      <p class="note">Consulta la <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">política de privacidad de Apple</a> para saber cómo maneja los pagos.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§3</span>
+      <h2>Tus documentos escaneados</h2>
+      <p>Los documentos que escaneas se guardan únicamente en el almacenamiento de tu propio dispositivo. Al usar el botón de exportar/compartir, PocketScan genera el PDF en tu teléfono y abre el panel nativo para compartir de iOS; tú decides a dónde se envía ese archivo — PocketScan no lo sube a ningún servidor propio en ningún momento.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§4</span>
+      <h2>Permisos del dispositivo</h2>
+      <p>PocketScan solicita acceso a la cámara para poder escanear documentos, y opcionalmente a tu galería si eliges guardar una copia ahí. Ninguno de estos permisos se usa para recopilar datos: la cámara solo captura la imagen que tú decides escanear, y nunca se accede a tu galería sin que tú lo indiques explícitamente.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§5</span>
+      <h2>Menores de edad</h2>
+      <p>PocketScan no recopila información de ningún usuario, sin importar su edad. Al no recopilar datos, la app cumple de forma natural con normativas de protección infantil como COPPA.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§6</span>
+      <h2>Cambios a esta política</h2>
+      <p>Si esta política cambia, la fecha de "Última actualización" en la parte superior de esta página se actualizará. Te recomendamos revisarla ocasionalmente.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§7</span>
+      <h2>Contacto</h2>
+      <p>¿Preguntas sobre esta política? Escríbeme a <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a>.</p>
+    </section>
+
+  </div>
+
+  <!-- ============ ENGLISH ============ -->
+  <div class="lang-block" data-lang="en" hidden>
+
+    <div class="summary">
+      <span class="dot"></span>
+      <p>In one sentence: PocketScan does not collect, store, or transmit any personal data. All processing — scanning, cropping, applying filters, and generating PDFs — happens only on your device.</p>
+    </div>
+
+    <section>
+      <span class="sec-num">§1</span>
+      <h2>What information we collect</h2>
+      <p>None. PocketScan doesn't require an account, doesn't include analytics tools or third-party trackers, and doesn't send data to any server we operate. Scanning documents, cropping them, applying filters, and generating the final PDF all run entirely on your phone, even without an internet connection.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§2</span>
+      <h2>In-app purchases</h2>
+      <p>Premium unlocks with a single USD 4.99 purchase, processed entirely by Apple (App Store). PocketScan never sees, receives, or stores your payment information — that transaction is handled by Apple under its own privacy policy.</p>
+      <p class="note">See <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's privacy policy</a> for how it handles payments.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§3</span>
+      <h2>Your scanned documents</h2>
+      <p>Documents you scan are stored only in your own device's storage. When you use the export/share button, PocketScan generates the PDF on your phone and opens the native iOS share sheet; you choose where that file goes — PocketScan never uploads it to any server of ours.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§4</span>
+      <h2>Device permissions</h2>
+      <p>PocketScan requests camera access so it can scan documents, and optionally your photo library if you choose to save a copy there. Neither permission is used to collect data: the camera only captures the image you choose to scan, and your photo library is never accessed unless you explicitly ask for it.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§5</span>
+      <h2>Children's privacy</h2>
+      <p>PocketScan doesn't collect information from any user, regardless of age. Because no data is collected, the app naturally complies with children's privacy regulations such as COPPA.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§6</span>
+      <h2>Changes to this policy</h2>
+      <p>If this policy changes, the "Last updated" date at the top of this page will change too. We recommend checking back occasionally.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§7</span>
+      <h2>Contact</h2>
+      <p>Questions about this policy? Email <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a>.</p>
+    </section>
+
+  </div>
+
+  <!-- ============ FRENCH ============ -->
+  <div class="lang-block" data-lang="fr" hidden>
+
+    <div class="summary">
+      <span class="dot"></span>
+      <p>En une phrase : PocketScan ne collecte, ne stocke ni ne transmet aucune donnée personnelle. Tout le traitement — numérisation, recadrage, filtres et génération de PDF — se fait uniquement sur votre appareil.</p>
+    </div>
+
+    <section>
+      <span class="sec-num">§1</span>
+      <h2>Quelles informations nous collectons</h2>
+      <p>Aucune. PocketScan ne nécessite pas de compte, n'inclut aucun outil d'analyse ni traceur tiers, et n'envoie aucune donnée vers un serveur que nous exploitons. La numérisation des documents, le recadrage, l'application de filtres et la génération du PDF final s'exécutent entièrement sur votre téléphone, même sans connexion internet.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§2</span>
+      <h2>Achats intégrés</h2>
+      <p>Premium se débloque avec un achat unique de 4,99 USD, traité entièrement par Apple (App Store). PocketScan ne voit, ne reçoit ni ne stocke jamais vos informations de paiement — cette transaction est gérée par Apple selon sa propre politique de confidentialité.</p>
+      <p class="note">Consultez la <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">politique de confidentialité d'Apple</a> pour savoir comment elle traite les paiements.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§3</span>
+      <h2>Vos documents numérisés</h2>
+      <p>Les documents que vous numérisez sont stockés uniquement sur le stockage de votre propre appareil. Lorsque vous utilisez le bouton exporter/partager, PocketScan génère le PDF sur votre téléphone et ouvre le panneau de partage natif d'iOS ; vous choisissez où ce fichier est envoyé — PocketScan ne le télécharge jamais vers l'un de nos serveurs.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§4</span>
+      <h2>Autorisations de l'appareil</h2>
+      <p>PocketScan demande l'accès à l'appareil photo pour pouvoir numériser des documents, et éventuellement à votre photothèque si vous choisissez d'y enregistrer une copie. Aucune de ces autorisations n'est utilisée pour collecter des données : l'appareil photo capture uniquement l'image que vous choisissez de numériser, et votre photothèque n'est jamais consultée sans votre demande explicite.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§5</span>
+      <h2>Confidentialité des mineurs</h2>
+      <p>PocketScan ne collecte d'informations auprès d'aucun utilisateur, quel que soit son âge. En ne collectant aucune donnée, l'application respecte naturellement les réglementations de protection des mineurs telles que le COPPA.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§6</span>
+      <h2>Modifications de cette politique</h2>
+      <p>Si cette politique change, la date de « Dernière mise à jour » en haut de cette page sera également mise à jour. Nous vous recommandons de la consulter occasionnellement.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§7</span>
+      <h2>Contact</h2>
+      <p>Des questions sur cette politique ? Écrivez à <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a>.</p>
+    </section>
+
+  </div>
+
+  <!-- ============ GERMAN ============ -->
+  <div class="lang-block" data-lang="de" hidden>
+
+    <div class="summary">
+      <span class="dot"></span>
+      <p>In einem Satz: PocketScan sammelt, speichert oder überträgt keine personenbezogenen Daten. Die gesamte Verarbeitung — Scannen, Zuschneiden, Filter anwenden und PDF erstellen — findet ausschließlich auf deinem Gerät statt.</p>
+    </div>
+
+    <section>
+      <span class="sec-num">§1</span>
+      <h2>Welche Informationen wir sammeln</h2>
+      <p>Keine. PocketScan erfordert kein Konto, enthält keine Analysetools oder Tracker von Drittanbietern und sendet keine Daten an einen von uns betriebenen Server. Das Scannen von Dokumenten, Zuschneiden, Anwenden von Filtern und Erstellen des finalen PDFs läuft vollständig auf deinem Telefon, sogar ohne Internetverbindung.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§2</span>
+      <h2>In-App-Käufe</h2>
+      <p>Premium wird mit einem einmaligen Kauf von 4,99 USD freigeschaltet, der vollständig von Apple (App Store) verarbeitet wird. PocketScan sieht, empfängt oder speichert deine Zahlungsinformationen nie — diese Transaktion wird von Apple gemäß dessen eigener Datenschutzrichtlinie abgewickelt.</p>
+      <p class="note">Siehe <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apples Datenschutzrichtlinie</a> für den Umgang mit Zahlungen.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§3</span>
+      <h2>Deine gescannten Dokumente</h2>
+      <p>Dokumente, die du scannst, werden ausschließlich im Speicher deines eigenen Geräts gespeichert. Wenn du die Export-/Teilen-Schaltfläche verwendest, erstellt PocketScan das PDF auf deinem Telefon und öffnet das native iOS-Freigabemenü; du entscheidest, wohin diese Datei geht — PocketScan lädt sie niemals auf einen unserer Server hoch.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§4</span>
+      <h2>Geräteberechtigungen</h2>
+      <p>PocketScan fragt nach Kamerazugriff, um Dokumente scannen zu können, und optional nach Zugriff auf deine Fotomediathek, falls du dort eine Kopie speichern möchtest. Keine dieser Berechtigungen wird zum Sammeln von Daten verwendet: Die Kamera erfasst nur das Bild, das du zum Scannen auswählst, und auf deine Fotomediathek wird nie zugegriffen, ohne dass du es ausdrücklich verlangst.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§5</span>
+      <h2>Datenschutz für Minderjährige</h2>
+      <p>PocketScan sammelt keine Informationen von Nutzern, unabhängig vom Alter. Da keine Daten gesammelt werden, erfüllt die App auf natürliche Weise Kinderschutzbestimmungen wie COPPA.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§6</span>
+      <h2>Änderungen dieser Richtlinie</h2>
+      <p>Falls sich diese Richtlinie ändert, wird auch das Datum „Zuletzt aktualisiert" oben auf dieser Seite aktualisiert. Wir empfehlen, gelegentlich hier vorbeizuschauen.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§7</span>
+      <h2>Kontakt</h2>
+      <p>Fragen zu dieser Richtlinie? Schreib an <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a>.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <span>PocketScan</span>
+    <span class="lang-block" data-lang="es">Documento independiente de la app &middot; sin recopilación de datos</span>
+    <span class="lang-block" data-lang="en" hidden>Standalone document &middot; no data collected</span>
+    <span class="lang-block" data-lang="fr" hidden>Document indépendant de l'application &middot; aucune donnée collectée</span>
+    <span class="lang-block" data-lang="de" hidden>Eigenständiges Dokument &middot; keine Daten gesammelt</span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('[data-set-lang]');
+    var blocks = document.querySelectorAll('.lang-block');
+
+    function setLang(lang) {
+      blocks.forEach(function (el) {
+        el.hidden = el.getAttribute('data-lang') !== lang;
+      });
+      buttons.forEach(function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.getAttribute('data-set-lang') === lang));
+      });
+      document.documentElement.setAttribute('lang', lang);
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setLang(btn.getAttribute('data-set-lang'));
+      });
+    });
+  })();
+</script>
