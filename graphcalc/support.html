@@ -1,0 +1,398 @@
+<title>GraphCalc Support</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Karla:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-alt: #eef2f9;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --border: #e1e7f0;
+    --accent-blue: #2563eb;
+    --accent-blue-soft: #dbeafe;
+    --accent-red: #dc2626;
+    --accent-red-soft: #fee2e2;
+    --focus: #2563eb;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1220;
+      --surface: #121b2e;
+      --surface-alt: #16223a;
+      --text: #e6ecf5;
+      --text-muted: #93a4bf;
+      --border: #1f2c47;
+      --accent-blue: #60a5fa;
+      --accent-blue-soft: #16294a;
+      --accent-red: #f87171;
+      --accent-red-soft: #3a1620;
+      --focus: #60a5fa;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0b1220;
+    --surface: #121b2e;
+    --surface-alt: #16223a;
+    --text: #e6ecf5;
+    --text-muted: #93a4bf;
+    --border: #1f2c47;
+    --accent-blue: #60a5fa;
+    --accent-blue-soft: #16294a;
+    --accent-red: #f87171;
+    --accent-red-soft: #3a1620;
+    --focus: #60a5fa;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Karla", ui-sans-serif, system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent-blue); text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+  }
+
+  header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-bottom: 2.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .mark-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mark {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  h1 {
+    font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .lang-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+  }
+
+  .lang-toggle button {
+    appearance: none;
+    border: none;
+    background: var(--surface);
+    color: var(--text-muted);
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: 0.04em;
+  }
+
+  .lang-toggle button + button { border-left: 1px solid var(--border); }
+
+  .lang-toggle button[aria-pressed="true"] {
+    background: var(--accent-blue);
+    color: #fff;
+  }
+
+  /* ---------- contact callout ---------- */
+
+  .contact {
+    background: var(--accent-blue-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 2.75rem;
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .contact .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    margin-top: 0.55rem;
+    flex-shrink: 0;
+  }
+
+  .contact p {
+    margin: 0;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .contact a { font-weight: 700; }
+
+  /* ---------- faq ---------- */
+
+  h2.section-title {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 1.25rem;
+  }
+
+  details {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  summary {
+    font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    text-wrap: balance;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary::after {
+    content: "+";
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: var(--accent-blue);
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+
+  details[open] summary::after { transform: rotate(45deg); }
+
+  details p {
+    margin: 0;
+    padding: 0 1.1rem 1.1rem;
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    summary::after { transition: none; }
+  }
+
+  .faq-block { margin-bottom: 2.75rem; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  footer a { color: var(--text-muted); }
+
+  [hidden] { display: none !important; }
+</style>
+
+<div class="page">
+
+  <header>
+    <div class="mark-row">
+      <svg class="mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M6 50 Q32 6 58 50" fill="none" stroke="var(--accent-blue)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="10" y1="14" x2="54" y2="52" stroke="var(--accent-red)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span class="eyebrow">GraphCalc &middot; Support</span>
+    </div>
+
+    <h1>
+      <span class="lang-block" data-lang="es">Soporte</span>
+      <span class="lang-block" data-lang="en" hidden>Support</span>
+    </h1>
+
+    <div class="meta-row">
+      <span></span>
+      <div class="lang-toggle" role="group" aria-label="Language / Idioma">
+        <button type="button" data-set-lang="es" aria-pressed="true">ES</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ SPANISH ============ -->
+  <div class="lang-block" data-lang="es">
+
+    <div class="contact">
+      <span class="dot"></span>
+      <p>¿Necesitas ayuda? Escríbeme directamente a <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a> — respondo personalmente.</p>
+    </div>
+
+    <div class="faq-block">
+      <h2 class="section-title">Preguntas frecuentes</h2>
+
+      <details open>
+        <summary>¿Cómo desbloqueo Ecuaciones, Matrices y Cálculo?</summary>
+        <p>Entra a cualquiera de esos tres módulos y toca el botón de compra en la pantalla de bloqueo. Es un pago único de USD 1.99 — no es una suscripción, se desbloquean los tres módulos para siempre con esa sola compra.</p>
+      </details>
+
+      <details>
+        <summary>Ya pagué, pero los módulos siguen bloqueados</summary>
+        <p>Abre cualquiera de los módulos de pago y toca "Restaurar compras", conectado con el mismo Apple ID (o cuenta de Google Play) con el que hiciste la compra originalmente. Esto vuelve a activar el desbloqueo sin cobrarte de nuevo.</p>
+      </details>
+
+      <details>
+        <summary>¿GraphCalc funciona sin conexión a internet?</summary>
+        <p>Sí, completamente. La calculadora, la graficadora y todos los módulos funcionan sin internet — solo necesitas conexión para completar o restaurar una compra a través de la tienda de tu dispositivo.</p>
+      </details>
+
+      <details>
+        <summary>¿Qué datos recopila la app?</summary>
+        <p>Ninguno. GraphCalc no tiene cuentas, analítica ni rastreadores. Puedes ver el detalle completo en la <a href="https://danielaristo.com/graphcalc/privacy-policy.html">política de privacidad</a>.</p>
+      </details>
+
+      <details>
+        <summary>¿Cómo cambio el idioma de la app?</summary>
+        <p>GraphCalc detecta automáticamente el idioma configurado en tu dispositivo (español o inglés). Para cambiarlo, ajusta el idioma del sistema en los Ajustes de tu teléfono.</p>
+      </details>
+
+      <details>
+        <summary>Encontré un error o tengo una sugerencia</summary>
+        <p>Escríbeme a <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a> contándome qué pasó (idealmente con una captura de pantalla) — leo todos los correos.</p>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ============ ENGLISH ============ -->
+  <div class="lang-block" data-lang="en" hidden>
+
+    <div class="contact">
+      <span class="dot"></span>
+      <p>Need help? Email me directly at <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a> — I answer personally.</p>
+    </div>
+
+    <div class="faq-block">
+      <h2 class="section-title">Frequently asked questions</h2>
+
+      <details open>
+        <summary>How do I unlock Equations, Matrices, and Calculus?</summary>
+        <p>Open any of those three modules and tap the purchase button on the lock screen. It's a one-time USD 1.99 payment — not a subscription — that unlocks all three modules forever.</p>
+      </details>
+
+      <details>
+        <summary>I already paid, but the modules are still locked</summary>
+        <p>Open any of the paid modules and tap "Restore purchases", signed in with the same Apple ID (or Google Play account) you used to buy it originally. This re-activates the unlock without charging you again.</p>
+      </details>
+
+      <details>
+        <summary>Does GraphCalc work without an internet connection?</summary>
+        <p>Yes, completely. The calculator, grapher, and every module work offline — you only need a connection to complete or restore a purchase through your device's store.</p>
+      </details>
+
+      <details>
+        <summary>What data does the app collect?</summary>
+        <p>None. GraphCalc has no accounts, no analytics, and no trackers. See the full details in the <a href="https://danielaristo.com/graphcalc/privacy-policy.html">privacy policy</a>.</p>
+      </details>
+
+      <details>
+        <summary>How do I change the app's language?</summary>
+        <p>GraphCalc automatically follows the language set on your device (English or Spanish). To change it, update your phone's system language in Settings.</p>
+      </details>
+
+      <details>
+        <summary>I found a bug or have a suggestion</summary>
+        <p>Email me at <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a> with what happened (a screenshot helps) — I read every message.</p>
+      </details>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>GraphCalc</span>
+    <span class="lang-block" data-lang="es"><a href="https://danielaristo.com/graphcalc/privacy-policy.html">Política de privacidad</a></span>
+    <span class="lang-block" data-lang="en" hidden><a href="https://danielaristo.com/graphcalc/privacy-policy.html">Privacy policy</a></span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('[data-set-lang]');
+    var blocks = document.querySelectorAll('.lang-block');
+
+    function setLang(lang) {
+      blocks.forEach(function (el) {
+        el.hidden = el.getAttribute('data-lang') !== lang;
+      });
+      buttons.forEach(function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.getAttribute('data-set-lang') === lang));
+      });
+      document.documentElement.setAttribute('lang', lang);
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setLang(btn.getAttribute('data-set-lang'));
+      });
+    });
+  })();
+</script>

@@ -1,0 +1,405 @@
+<title>GraphCalc Privacy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Karla:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-alt: #eef2f9;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --border: #e1e7f0;
+    --accent-blue: #2563eb;
+    --accent-blue-soft: #dbeafe;
+    --accent-red: #dc2626;
+    --accent-red-soft: #fee2e2;
+    --focus: #2563eb;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1220;
+      --surface: #121b2e;
+      --surface-alt: #16223a;
+      --text: #e6ecf5;
+      --text-muted: #93a4bf;
+      --border: #1f2c47;
+      --accent-blue: #60a5fa;
+      --accent-blue-soft: #16294a;
+      --accent-red: #f87171;
+      --accent-red-soft: #3a1620;
+      --focus: #60a5fa;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0b1220;
+    --surface: #121b2e;
+    --surface-alt: #16223a;
+    --text: #e6ecf5;
+    --text-muted: #93a4bf;
+    --border: #1f2c47;
+    --accent-blue: #60a5fa;
+    --accent-blue-soft: #16294a;
+    --accent-red: #f87171;
+    --accent-red-soft: #3a1620;
+    --focus: #60a5fa;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Karla", ui-sans-serif, system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent-blue); text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+  }
+
+  /* ---------- header ---------- */
+
+  header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-bottom: 2.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .mark-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mark {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  h1 {
+    font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .updated {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .lang-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+  }
+
+  .lang-toggle button {
+    appearance: none;
+    border: none;
+    background: var(--surface);
+    color: var(--text-muted);
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: 0.04em;
+  }
+
+  .lang-toggle button + button { border-left: 1px solid var(--border); }
+
+  .lang-toggle button[aria-pressed="true"] {
+    background: var(--accent-blue);
+    color: #fff;
+  }
+
+  /* ---------- summary callout ---------- */
+
+  .summary {
+    background: var(--accent-blue-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 2.75rem;
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .summary .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    margin-top: 0.55rem;
+    flex-shrink: 0;
+  }
+
+  .summary p {
+    margin: 0;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ---------- sections ---------- */
+
+  section {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: 0.25rem 1rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .sec-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.85rem;
+    color: var(--accent-blue);
+    padding-top: 0.2rem;
+  }
+
+  section h2 {
+    grid-column: 2;
+    font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+  }
+
+  section p, section ul {
+    grid-column: 2;
+    color: var(--text-muted);
+    margin: 0 0 0.6rem;
+    max-width: 62ch;
+  }
+
+  section p:last-child, section ul:last-child { margin-bottom: 0; }
+
+  section ul { padding-left: 1.1rem; }
+  section li { margin-bottom: 0.35rem; }
+
+  .note {
+    font-size: 0.92rem;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem;
+  }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  footer a { color: var(--text-muted); }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 480px) {
+    section { grid-template-columns: 1fr; }
+    .sec-num { grid-row: 1; }
+    section h2, section p, section ul { grid-column: 1; }
+  }
+</style>
+
+<div class="page">
+
+  <header>
+    <div class="mark-row">
+      <svg class="mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M6 50 Q32 6 58 50" fill="none" stroke="var(--accent-blue)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="10" y1="14" x2="54" y2="52" stroke="var(--accent-red)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span class="eyebrow">GraphCalc &middot; Legal</span>
+    </div>
+
+    <h1>
+      <span class="lang-block" data-lang="es">Política de Privacidad</span>
+      <span class="lang-block" data-lang="en" hidden>Privacy Policy</span>
+    </h1>
+
+    <div class="meta-row">
+      <span class="updated">
+        <span class="lang-block" data-lang="es">Última actualización: 24 de agosto de 2026</span>
+        <span class="lang-block" data-lang="en" hidden>Last updated: August 24, 2026</span>
+      </span>
+      <div class="lang-toggle" role="group" aria-label="Language / Idioma">
+        <button type="button" data-set-lang="es" aria-pressed="true">ES</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ SPANISH ============ -->
+  <div class="lang-block" data-lang="es">
+
+    <div class="summary">
+      <span class="dot"></span>
+      <p>En una frase: GraphCalc no recopila, almacena ni transmite ningún dato personal. Todos los cálculos y gráficas ocurren únicamente en tu dispositivo.</p>
+    </div>
+
+    <section>
+      <span class="sec-num">§1</span>
+      <h2>Qué información recopilamos</h2>
+      <p>Ninguna. GraphCalc no requiere crear una cuenta, no incluye herramientas de analítica ni rastreadores de terceros, y no envía datos a ningún servidor propio. La calculadora científica, la graficadora, los sistemas de ecuaciones, las matrices y las operaciones de cálculo diferencial e integral se ejecutan completamente de forma local en tu teléfono, incluso sin conexión a internet.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§2</span>
+      <h2>Compras dentro de la app</h2>
+      <p>Los módulos de Ecuaciones, Matrices y Cálculo se desbloquean con una compra única de USD 1.99, procesada íntegramente por Apple (App Store) o Google (Google Play) según tu dispositivo. GraphCalc nunca ve, recibe ni almacena tu información de pago — esa transacción queda a cargo de Apple o Google, bajo sus propias políticas de privacidad.</p>
+      <p class="note">Consulta la <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">política de privacidad de Apple</a> o la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">política de privacidad de Google</a> para saber cómo manejan los pagos.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§3</span>
+      <h2>Función de compartir gráficas</h2>
+      <p>Al usar el botón de compartir en la Graficadora, la app genera una imagen de la gráfica dentro de tu propio dispositivo y abre el panel nativo para compartir de iOS o Android. Tú decides a dónde se envía esa imagen; GraphCalc no la sube a ningún servidor propio en ningún momento.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§4</span>
+      <h2>Menores de edad</h2>
+      <p>GraphCalc no recopila información de ningún usuario, sin importar su edad. Al no recopilar datos, la app cumple de forma natural con normativas de protección infantil como COPPA.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§5</span>
+      <h2>Cambios a esta política</h2>
+      <p>Si esta política cambia, la fecha de "Última actualización" en la parte superior de esta página se actualizará. Te recomendamos revisarla ocasionalmente.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§6</span>
+      <h2>Contacto</h2>
+      <p>¿Preguntas sobre esta política? Escríbeme a <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a>.</p>
+    </section>
+
+  </div>
+
+  <!-- ============ ENGLISH ============ -->
+  <div class="lang-block" data-lang="en" hidden>
+
+    <div class="summary">
+      <span class="dot"></span>
+      <p>In one sentence: GraphCalc does not collect, store, or transmit any personal data. All calculations and graphs happen only on your device.</p>
+    </div>
+
+    <section>
+      <span class="sec-num">§1</span>
+      <h2>What information we collect</h2>
+      <p>None. GraphCalc doesn't require an account, doesn't include analytics tools or third-party trackers, and doesn't send data to any server we operate. The scientific calculator, grapher, equation solver, matrix tools, and calculus features all run entirely on your phone, even without an internet connection.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§2</span>
+      <h2>In-app purchases</h2>
+      <p>The Equations, Matrices, and Calculus modules unlock with a single USD 1.99 purchase, processed entirely by Apple (App Store) or Google (Google Play), depending on your device. GraphCalc never sees, receives, or stores your payment information — that transaction is handled by Apple or Google under their own privacy policies.</p>
+      <p class="note">See <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's privacy policy</a> or <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a> for how they handle payments.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§3</span>
+      <h2>Sharing a graph</h2>
+      <p>When you use the share button in the Grapher, the app creates an image of the graph on your own device and opens the native iOS or Android share sheet. You choose where that image goes; GraphCalc never uploads it to any server of ours.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§4</span>
+      <h2>Children's privacy</h2>
+      <p>GraphCalc doesn't collect information from any user, regardless of age. Because no data is collected, the app naturally complies with children's privacy regulations such as COPPA.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§5</span>
+      <h2>Changes to this policy</h2>
+      <p>If this policy changes, the "Last updated" date at the top of this page will change too. We recommend checking back occasionally.</p>
+    </section>
+
+    <section>
+      <span class="sec-num">§6</span>
+      <h2>Contact</h2>
+      <p>Questions about this policy? Email <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a>.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <span>GraphCalc</span>
+    <span class="lang-block" data-lang="es">Documento independiente de la app &middot; sin recopilación de datos</span>
+    <span class="lang-block" data-lang="en" hidden>Standalone document &middot; no data collected</span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('[data-set-lang]');
+    var blocks = document.querySelectorAll('.lang-block');
+
+    function setLang(lang) {
+      blocks.forEach(function (el) {
+        el.hidden = el.getAttribute('data-lang') !== lang;
+      });
+      buttons.forEach(function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.getAttribute('data-set-lang') === lang));
+      });
+      document.documentElement.setAttribute('lang', lang);
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setLang(btn.getAttribute('data-set-lang'));
+      });
+    });
+  })();
+</script>
