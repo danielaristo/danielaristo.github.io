@@ -1,0 +1,202 @@
+<title>DAX Snippets Privacy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F7F8F8;
+    --surface: #FFFFFF;
+    --surface-alt: #EEF2F2;
+    --text: #12181A;
+    --text-muted: #57646A;
+    --border: #DEE5E5;
+    --accent: #0D9488;
+    --accent-soft: #D9F6F1;
+    --focus: #0D9488;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1115;
+      --surface: #171B22;
+      --surface-alt: #12161D;
+      --text: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border: #2E353F;
+      --accent: #2DD4BF;
+      --accent-soft: #123832;
+      --focus: #2DD4BF;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0F1115;
+    --surface: #171B22;
+    --surface-alt: #12161D;
+    --text: #F1F5F9;
+    --text-muted: #94A3B8;
+    --border: #2E353F;
+    --accent: #2DD4BF;
+    --accent-soft: #123832;
+    --focus: #2DD4BF;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  .page { max-width: 720px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+
+  header {
+    display: flex; flex-direction: column; gap: 1.25rem;
+    padding-bottom: 2.25rem; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem;
+  }
+
+  .mark-row { display: flex; align-items: center; gap: 0.75rem; }
+  .mark {
+    width: 36px; height: 36px; flex-shrink: 0; border-radius: 9px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-size: 14px;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+
+  h1 {
+    font-family: "IBM Plex Sans", ui-sans-serif, sans-serif;
+    font-weight: 700; font-size: clamp(1.75rem, 4vw, 2.35rem);
+    letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+  }
+
+  .meta-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+  .updated { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.82rem; color: var(--text-muted); }
+
+  .summary {
+    background: var(--accent-soft); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.25rem 1.4rem; margin-bottom: 2.75rem; display: flex; gap: 0.9rem; align-items: flex-start;
+  }
+  .summary .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 0.55rem; flex-shrink: 0; }
+  .summary p { margin: 0; color: var(--text); font-weight: 500; }
+
+  section { display: grid; grid-template-columns: 2.75rem 1fr; gap: 0.25rem 1rem; margin-bottom: 2.25rem; }
+  .sec-num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.85rem; color: var(--accent); padding-top: 0.2rem; }
+  section h2 {
+    grid-column: 2; font-family: "IBM Plex Sans", ui-sans-serif, sans-serif; font-weight: 600;
+    font-size: 1.1rem; margin: 0 0 0.5rem; text-wrap: balance;
+  }
+  section p, section ul { grid-column: 2; color: var(--text-muted); margin: 0 0 0.6rem; max-width: 62ch; }
+  section p:last-child, section ul:last-child { margin-bottom: 0; }
+  section ul { padding-left: 1.1rem; }
+  section li { margin-bottom: 0.35rem; }
+
+  .note {
+    font-size: 0.92rem; background: var(--surface-alt); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.75rem 0.9rem;
+  }
+
+  footer {
+    margin-top: 3rem; padding-top: 1.75rem; border-top: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.78rem; color: var(--text-muted);
+  }
+  footer a { color: var(--text-muted); }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 480px) {
+    section { grid-template-columns: 1fr; }
+    .sec-num { grid-row: 1; }
+    section h2, section p, section ul { grid-column: 1; }
+  }
+</style>
+
+<div class="page">
+
+  <header>
+    <div class="mark-row">
+      <div class="mark">{ }</div>
+      <span class="eyebrow">DAX Snippets &middot; Legal</span>
+    </div>
+    <h1>Privacy Policy</h1>
+    <div class="meta-row">
+      <span class="updated">Last updated: September 25, 2026</span>
+    </div>
+  </header>
+
+  <div class="summary">
+    <span class="dot"></span>
+    <p>In one sentence: DAX Snippets does not collect, store, or transmit any personal data. Everything runs on your device, and the app works fully offline.</p>
+  </div>
+
+  <section>
+    <span class="sec-num">&sect;1</span>
+    <h2>What information we collect</h2>
+    <p>None. DAX Snippets doesn't require an account, doesn't include analytics tools or third-party trackers, and doesn't send any data to a server we operate. Every screen &mdash; the Snippets library and the Functions reference &mdash; runs entirely on your device, even without an internet connection.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">&sect;2</span>
+    <h2>Your purchase state</h2>
+    <p>Whether you've unlocked the Pro categories is checked directly against Apple's App Store record for your account (via StoreKit) &mdash; it isn't stored on any server we run, and we never see which formulas or functions you view or copy.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">&sect;3</span>
+    <h2>Purchases</h2>
+    <p>DAX Snippets is free to download, with one optional one-time in-app purchase (Premium Unlock) that unlocks every remaining Snippets and Functions category. There are no subscriptions. Apple processes the purchase; DAX Snippets never sees, receives, or stores your payment information.</p>
+    <p class="note">See <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's privacy policy</a> for how it handles App Store purchases.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">&sect;4</span>
+    <h2>Device permissions</h2>
+    <p>DAX Snippets does not request access to your camera, photo library, location, contacts, or any other device permission. Copying a formula uses the system clipboard, which iOS already grants every app by default.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">&sect;5</span>
+    <h2>Children's privacy</h2>
+    <p>DAX Snippets doesn't collect information from any user, regardless of age. Because no data is collected, the app naturally complies with children's privacy regulations such as COPPA.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">&sect;6</span>
+    <h2>Trademarks</h2>
+    <p>DAX Snippets is an independent reference tool and is not affiliated with, endorsed by, or sponsored by Microsoft. &ldquo;DAX&rdquo; and &ldquo;Power BI&rdquo; are trademarks of Microsoft Corporation.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">&sect;7</span>
+    <h2>Changes to this policy</h2>
+    <p>If this policy changes, the &ldquo;Last updated&rdquo; date at the top of this page will change too. We recommend checking back occasionally.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">&sect;8</span>
+    <h2>Contact</h2>
+    <p>Questions about this policy? Email <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a>.</p>
+  </section>
+
+  <footer>
+    <span>DAX Snippets</span>
+    <span>Standalone document &middot; no data collected</span>
+  </footer>
+
+</div>
