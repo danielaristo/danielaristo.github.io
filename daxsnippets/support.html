@@ -1,0 +1,202 @@
+<title>DAX Snippets Support</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F7F8F8;
+    --surface: #FFFFFF;
+    --surface-alt: #EEF2F2;
+    --text: #12181A;
+    --text-muted: #57646A;
+    --border: #DEE5E5;
+    --accent: #0D9488;
+    --accent-soft: #D9F6F1;
+    --navy: #0F172A;
+    --focus: #0D9488;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1115;
+      --surface: #171B22;
+      --surface-alt: #12161D;
+      --text: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border: #2E353F;
+      --accent: #2DD4BF;
+      --accent-soft: #123832;
+      --navy: #0F172A;
+      --focus: #2DD4BF;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0F1115;
+    --surface: #171B22;
+    --surface-alt: #12161D;
+    --text: #F1F5F9;
+    --text-muted: #94A3B8;
+    --border: #2E353F;
+    --accent: #2DD4BF;
+    --accent-soft: #123832;
+    --navy: #0F172A;
+    --focus: #2DD4BF;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  .page { max-width: 720px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+
+  header {
+    display: flex; flex-direction: column; gap: 1.25rem;
+    padding-bottom: 2.25rem; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem;
+  }
+  .mark-row { display: flex; align-items: center; gap: 0.75rem; }
+  .mark {
+    width: 36px; height: 36px; flex-shrink: 0; border-radius: 9px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-size: 14px;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  h1 {
+    font-family: "IBM Plex Sans", ui-sans-serif, sans-serif;
+    font-weight: 700; font-size: clamp(1.75rem, 4vw, 2.35rem);
+    letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+  }
+  .meta-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+  .updated { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.82rem; color: var(--text-muted); }
+
+  .summary {
+    background: var(--accent-soft); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.25rem 1.4rem; margin-bottom: 2.75rem; display: flex; gap: 0.9rem; align-items: flex-start;
+  }
+  .summary .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 0.55rem; flex-shrink: 0; }
+  .summary p { margin: 0; color: var(--text); font-weight: 500; }
+  .summary a { font-weight: 700; }
+
+  section { display: grid; grid-template-columns: 2.75rem 1fr; gap: 0.25rem 1rem; margin-bottom: 2.25rem; }
+  .sec-num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.85rem; color: var(--accent); padding-top: 0.2rem; }
+  section h2 {
+    grid-column: 2; font-family: "IBM Plex Sans", ui-sans-serif, sans-serif; font-weight: 600;
+    font-size: 1.1rem; margin: 0 0 0.5rem; text-wrap: balance;
+  }
+  section p, section ul { grid-column: 2; color: var(--text-muted); margin: 0 0 0.6rem; max-width: 62ch; }
+  section p:last-child, section ul:last-child { margin-bottom: 0; }
+
+  .faq-item {
+    grid-column: 2;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1rem 1.15rem; margin-bottom: 0.75rem;
+  }
+  .faq-item:last-child { margin-bottom: 0; }
+  .faq-q { font-family: "IBM Plex Sans", ui-sans-serif, sans-serif; font-weight: 600; font-size: 0.98rem; color: var(--text); margin: 0 0 0.4rem; }
+  .faq-a { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
+
+  .contact-card {
+    grid-column: 2; background: var(--navy); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.75rem;
+  }
+  .contact-card span { color: #FFFFFF; }
+  .contact-card a { color: var(--accent); font-weight: 700; }
+
+  footer {
+    margin-top: 3rem; padding-top: 1.75rem; border-top: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.78rem; color: var(--text-muted);
+  }
+  footer a { color: var(--text-muted); }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 480px) {
+    section { grid-template-columns: 1fr; }
+    .sec-num { grid-row: 1; }
+    section h2, section p, section ul, .faq-item, .contact-card { grid-column: 1; }
+  }
+</style>
+
+<div class="page">
+
+  <header>
+    <div class="mark-row">
+      <div class="mark">{ }</div>
+      <span class="eyebrow">DAX Snippets &middot; Support</span>
+    </div>
+    <h1>Support</h1>
+    <div class="meta-row">
+      <span class="updated">DAX Snippets v1.0</span>
+    </div>
+  </header>
+
+  <div class="summary">
+    <span class="dot"></span>
+    <p>Need help? Email me directly at <a href="mailto:danielaristo@yahoo.com">danielaristo@yahoo.com</a> &mdash; I answer personally.</p>
+  </div>
+
+  <section>
+    <span class="sec-num">&sect;1</span>
+    <h2>Frequently asked questions</h2>
+
+    <div class="faq-item">
+      <p class="faq-q">Do I need an internet connection to use the app?</p>
+      <p class="faq-a">No. Once installed, DAX Snippets works fully offline &mdash; every snippet and function is bundled with the app.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Which categories are free?</p>
+      <p class="faq-a">Time Intelligence and Aggregations &amp; Ratios (Snippets), plus Aggregation and Filter &amp; Context (Functions) are free to use. A single Premium Unlock purchase opens every remaining category.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">I bought Premium Unlock but switched phones &mdash; do I have to pay again?</p>
+      <p class="faq-a">No. Open the paywall screen on any locked category and tap &ldquo;Restore purchase.&rdquo; Apple restores it to your account at no extra cost.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Is this app affiliated with Microsoft?</p>
+      <p class="faq-a">No. DAX Snippets is an independent reference tool, not affiliated with, endorsed by, or sponsored by Microsoft. &ldquo;DAX&rdquo; and &ldquo;Power BI&rdquo; are trademarks of Microsoft Corporation.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Does the app collect or upload my data?</p>
+      <p class="faq-a">No, never. Everything runs on your device. See the full details in the <a href="./privacy-policy.html">privacy policy</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">&sect;2</span>
+    <h2>Report a problem or suggest a feature</h2>
+    <div class="contact-card">
+      <span>Found a wrong formula, a bug, or have an idea?</span>
+      <a href="mailto:danielaristo@yahoo.com?subject=DAX%20Snippets">Email me</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>DAX Snippets</span>
+    <span><a href="./privacy-policy.html">Privacy policy</a></span>
+  </footer>
+
+</div>
