@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resultados del diagnóstico · Maestría en Geotecnia, Cohorte 1</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#f1f0ec;--ink:#1a1a1a;--ink2:#5c5c58;--line:#dcdbd5;--accent:#c8000f}
+@media (prefers-color-scheme:dark){:root{--bg:#161616;--ink:#f2f2f0;--ink2:#a8a8a2;--line:#3a3a36}}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+header img{width:36px;height:36px;flex:none}
+header h1{font-size:15px;margin:0;font-weight:600;flex:1 1 220px;line-height:1.25}
+header .n{font-size:13px;color:var(--ink2)}
+button{font:inherit;font-size:13px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+#view{flex:1;min-height:0;position:relative;overflow:hidden}
+#fit{position:absolute;left:0;top:0;transform-origin:top left}
+.st{width:680px;height:383px;background:#fff;color:#1a1a1a;border-radius:12px;padding:12px 18px 10px;display:flex;flex-direction:column;overflow:hidden;cursor:pointer}
+.hd{display:flex;justify-content:space-between;font-size:11px;color:#7a7a74}
+.kk{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#c8000f;font-weight:600;margin-top:6px}
+.tt{font-size:19px;font-weight:600;line-height:1.2;margin:2px 0 1px}
+.qq{font-size:12px;color:#6b6a64;margin:0 0 6px}
+.bd{flex:1;display:flex;gap:18px;align-items:center;min-height:0}
+.ic{display:flex;flex-wrap:wrap;gap:3px 2px}
+.ic svg{display:block}
+.lg{display:flex;flex-direction:column;gap:7px;flex:1}
+.lr{display:flex;align-items:center;gap:8px;font-size:13px}
+.lr b{font-size:19px;font-weight:600;min-width:50px;text-align:right}
+.lr s{text-decoration:none;color:#7a7a74;font-size:12px}
+.mr{display:grid;grid-template-columns:150px 1fr 44px;gap:8px;align-items:center;font-size:12px;margin:2.5px 0}
+.mr b{font-weight:600;font-size:13px;text-align:right}
+.msg{max-width:420px;margin:12vh auto;text-align:center;color:var(--ink2);padding:0 16px}
+.msg input{font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:8px;width:100%;margin:10px 0;background:transparent;color:var(--ink)}
+body.fs header{display:none}
+#nav{display:flex;align-items:center;gap:6px}
+</style>
+</head>
+<body>
+<header>
+  <img src="logo-unilibre.png" alt="Universidad Libre" width="36" height="36">
+  <h1>Diagnóstico del grupo · Maestría en Geotecnia · Cohorte 1</h1>
+  <span class="n" id="n"></span>
+  <button id="rf" type="button">Actualizar</button>
+  <span id="nav"><button id="pv" type="button" aria-label="Anterior">←</button><span class="n" id="ct"></span><button id="nx" type="button" aria-label="Siguiente">→</button></span>
+  <button id="fs" type="button">Pantalla completa</button>
+</header>
+<div id="view"><div id="fit"><div class="st" id="st"></div></div></div>
+<script src="config.js"></script>
+<script src="schema.js"></script>
+<script>
+(function(){
+var CFG=window.DIAG||{},Q={},DEMO=new URLSearchParams(location.search).get('demo')==='1';
+SCHEMA.forEach(function(s){s.qs.forEach(function(q){Q[q.k]=q})});
+var R='#c8000f',PAL=['#c8000f','#1a1a1a','#6b6a64','#9a9993','#c9c8c0','#e3a3a9'],GRY='#dcdbd5';
+var rows=[],S=[],cur=0,GEO=null,N=0;
+
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function lc(s){return s.charAt(0).toLowerCase()+s.slice(1)}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function pc(c){return N?Math.round(c*100/N):0}
+function d10(c){return Math.round(c*10/N)}
+function dec(x){return x.toFixed(1).replace('.',',')}
+function list(a){return a.length>1?a.slice(0,-1).join(', ')+' y '+a[a.length-1]:(a[0]||'')}
+function ic(c,sz){sz=sz||24;return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4.2" fill="'+c+'"/><path d="M3.5 22c0-5 3.8-8.4 8.5-8.4s8.5 3.4 8.5 8.4z" fill="'+c+'"/></svg>'}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+
+function demoRows(){
+  var ex=['Aprender a investigar problemas reales de mi región','Publicar un artículo sobre estabilidad de taludes','Fortalecer mis bases para un doctorado','Mejorar el diseño de cimentaciones con criterio científico','Entender cómo se formula una tesis en geotecnia','Conectar mi práctica de obra con la investigación','Aprender modelación numérica aplicada','Crecer profesionalmente y dar clases','Investigar deslizamientos en la zona cafetera','Mejorar mi escritura científica'];
+  var dep=['Antioquia','Risaralda','Bogotá D.C.','Valle del Cauca','Santander','Caldas','Cundinamarca','Boyacá','Nariño','Atlántico','Quindío','Tolima','Huila','Exterior'],out=[];
+  for(var i=0;i<20;i++){
+    var r={formacion:Math.random()<.6?'Ingeniería civil':pick(['Geología','Geotecnista','Ingeniería de minas o geológica','Ingeniería ambiental o sanitaria']),
+      grado:pick(Q.grado.opts),posgrado:pick(Q.posgrado.opts),departamento:pick(dep),ocupacion:pick(Q.ocupacion.opts),experiencia:pick(Q.experiencia.opts),
+      areas:[pick(Q.areas.opts.slice(0,9)),pick(Q.areas.opts.slice(0,9))],herramientas:[pick(['PLAXIS','GeoStudio','Excel','Python o R','QGIS o ArcGIS']),'Excel'],
+      inv_previa:[pick(Q.inv_previa.opts)],ingles:pick(Q.ingles.opts),motivacion:pick(Q.motivacion.opts),expectativa:pick(ex),
+      preocupaciones:[pick(Q.preocupaciones.opts.slice(0,8)),pick(Q.preocupaciones.opts.slice(0,8))]};
+    SKILLS.forEach(function(it){r['skill_'+it.k]=String(1+Math.floor(Math.random()*5))});
+    r.skill_cienciometria=String(1+Math.floor(Math.random()*3));
+    out.push(r);
+  }
+  return out;
+}
+async function load(){
+  if(DEMO)return demoRows();
+  if(!CFG.API){try{return JSON.parse(localStorage.getItem('diag_geo_demo')||'[]')}catch(e){return[]}}
+  var pin=sessionStorage.getItem('diag_pin')||'';
+  var r=await fetch(CFG.API+'?action=stats&pin='+encodeURIComponent(pin));
+  var j=await r.json();
+  if(j.error==='pin')throw 'pin';
+  return j.rows||[];
+}
+function tally(k,multi){
+  var m={};
+  rows.forEach(function(r){var v=multi?(r[k]||[]):[r[k]];v.forEach(function(x){if(x)m[x]=(m[x]||0)+1})});
+  var order=Q[k]&&Q[k].opts?Q[k].opts:[];
+  return Object.keys(m).map(function(x){return[x,m[x]]}).sort(function(a,b){return b[1]-a[1]||order.indexOf(a[0])-order.indexOf(b[0])});
+}
+var FORM_PH={'Ingeniería civil':'ingenieros civiles','Geología':'geólogos','Geotecnista':'geotecnistas','Ingeniería de minas o geológica':'ingenieros de minas o geológicos','Ingeniería ambiental o sanitaria':'ingenieros ambientales o sanitarios','Arquitectura o construcción':'arquitectos o constructores'};
+var EXP_PH={'Ninguno':'ninguna experiencia en geotecnia','1-3':'entre 1 y 3 años de experiencia','4-7':'entre 4 y 7 años de experiencia','8-15':'entre 8 y 15 años de experiencia','Más de 15':'más de 15 años de experiencia'};
+var STOP='a al algo ante aprender con como cual cuales cuando de del desde donde el ella ellos en entre era es esta este esto estos fue ha hacer han hasta la las le les lo los mas me mi mis mucho muy no nos nuestra o otro para pero poder por porque que se ser si sin sobre su sus tambien tanto te tener ti tiene un una uno unos y ya yo quiero espero lograr maestria mejorar'.split(' ');
+function words(){
+  var m={};
+  rows.forEach(function(r){String(r.expectativa||'').toLowerCase().replace(/[.,;:!?¿¡()"“”]/g,' ').split(/\s+/).forEach(function(w){
+    var b=w.normalize('NFD').replace(/[̀-ͯ]/g,'');
+    if(w.length<4||STOP.indexOf(b)>-1)return;m[w]=(m[w]||0)+1})});
+  return Object.keys(m).map(function(w){return[w,m[w]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,34);
+}
+function one(k,sec,q,head){var t=tally(k,false);if(!t.length)return;S.push({k:sec,t:head(t),q:q,ty:'one',d:t.slice(0,6)})}
+function many(k,sec,q,head,top){var t=tally(k,true);if(!t.length)return;S.push({k:sec,t:head(t),q:q,ty:'many',d:t.slice(0,top||8)})}
+function cuantos(c){return N<5?c+' de '+N:d10(c)+' de cada 10'}
+
+function build(){
+  S=[];N=rows.length;
+  if(!N)return;
+  S.push({k:'Quiénes somos',t:N+(N===1?' persona respondió':' personas respondieron'),q:'Estudiantes de la cohorte 1',ty:'big'});
+  one('formacion','Quiénes somos','Formación de pregrado',function(t){
+    var ph=FORM_PH[t[0][0]]||'de otra formación';
+    if(N<5||pc(t[0][1])<40)return 'La formación más común: '+lc(t[0][0])+' ('+pc(t[0][1])+' %)';
+    return d10(t[0][1])>=10?'Todos son '+ph:cuantos(t[0][1])+' son '+ph;
+  });
+  one('posgrado','Quiénes somos','Estudios de posgrado previos',function(t){
+    var none=(t.filter(function(x){return x[0]==='Ninguno'})[0]||[0,0])[1];
+    return none*3>=N?cuantos(none)+' no tienen posgrado':'Lo más común: '+lc(t[0][0])+' ('+pc(t[0][1])+' %)';
+  });
+  one('grado','Quiénes somos','Año de grado del pregrado',function(t){
+    var rec=0;rows.forEach(function(r){if(r.grado==='2013-2018'||r.grado==='2019 o después')rec++});
+    return rec*2>N?'Más de la mitad se graduó desde 2013':'Lo más común: grado entre '+t[0][0]+' ('+pc(t[0][1])+' %)';
+  });
+  var dep=tally('departamento',false);
+  if(dep.length){
+    var nd=dep.filter(function(x){return x[0]!=='Exterior'}),top3=nd.slice(0,3),sum=0;top3.forEach(function(x){sum+=x[1]});
+    S.push({k:'Dónde vivimos',t:top3.length>=2?list(top3.map(function(x){return x[0]}))+' reúnen el '+pc(sum)+' %':(top3[0]?top3[0][0]+' concentra al '+pc(sum)+' %':'Estudiantes en el exterior'),q:'Estudiantes por departamento',ty:'map',d:dep});
+    if(nd.length>1)S.push({k:'Dónde vivimos',t:nd.length+' departamentos en un solo grupo',q:'Departamentos de residencia',ty:'many',d:dep.slice(0,8)});
+  }
+  one('ocupacion','En qué trabajamos','Ocupación principal',function(t){
+    return t.length>1?cap(lc(t[0][0]))+' y '+lc(t[1][0])+' suman el '+pc(t[0][1]+t[1][1])+' %':cap(t[0][0])+' ('+pc(t[0][1])+' %)';
+  });
+  one('experiencia','En qué trabajamos','Años de experiencia en geotecnia',function(t){
+    var ph=EXP_PH[t[0][0]]||lc(t[0][0]);return N<5?'Lo más común: '+ph:cuantos(t[0][1])+' tienen '+ph;
+  });
+  many('areas','En qué trabajamos','Áreas donde hemos trabajado',function(t){
+    var a=t.filter(function(x){return x[0]!=='Ninguna aún'});
+    return a.length>1?a[0][0]+' y '+lc(a[1][0])+', las áreas más frecuentes':(a[0]?a[0][0]+', el área más frecuente':'Sin área definida aún');
+  },8);
+  many('herramientas','Con qué trabajamos','Herramientas que usamos',function(t){
+    var a=t.filter(function(x){return x[0]!=='Ninguna'&&x[0]!=='Otra'});
+    return a[0]?a[0][0]+' lo usa el '+pc(a[0][1])+' % del grupo':'Pocas herramientas especializadas';
+  },8);
+  many('inv_previa','Con qué trabajamos','Experiencia investigativa previa',function(t){
+    var none=(t.filter(function(x){return x[0]==='Ninguna'})[0]||[0,0])[1];
+    return none?cuantos(none)+' nunca han investigado':'Todos tienen alguna experiencia investigando';
+  },5);
+  one('ingles','Con qué trabajamos','Nivel de lectura en inglés',function(t){
+    var hi=0;rows.forEach(function(r){if(r.ingles&&r.ingles.indexOf('Básico')<0)hi++});
+    return N<5?'Leen inglés en B1 o más: '+pc(hi)+' %':cuantos(hi)+' leen inglés en nivel B1 o superior';
+  });
+  var sk=SKILLS.map(function(it){
+    var c=[0,0,0,0,0],t=0,sum=0;
+    rows.forEach(function(r){var v=+r['skill_'+it.k];if(v>0){c[v-1]++;t++;sum+=v}});
+    return{n:it.t,t:t,a:t?sum/t:0,hi:t?Math.round((c[3]+c[4])*100/t):0};
+  }).filter(function(x){return x.t});
+  if(sk.length){
+    var low=sk.slice().sort(function(a,b){return a.a-b.a})[0];
+    S.push({k:'Qué tan cómodos nos sentimos',t:'Lo que menos dominamos: '+lc(low.n.replace(/ \(.*\)/,'')),q:'Autoevaluación de 1 (nada) a 5 (mucho)',ty:'rate',d:sk});
+  }
+  one('motivacion','Qué esperamos','Motivación principal',function(t){return t[0][0]+' encabeza la motivación ('+pc(t[0][1])+' %)'});
+  many('preocupaciones','Qué esperamos','Lo que más nos preocupa',function(t){
+    var a=t.filter(function(x){return x[0]!=='Ninguna'});
+    return a[0]?a[0][0]+' es la mayor preocupación ('+pc(a[0][1])+' %)':'Casi nada nos preocupa';
+  },8);
+  var w=words();
+  if(w.length>2)S.push({k:'Qué esperamos',t:list(w.slice(0,3).map(function(x){return x[0]}))+': lo que más repetimos',q:'Palabras de nuestras expectativas',ty:'cloud',d:w});
+}
+
+function icons20(d){
+  var raw=d.map(function(r){return r[1]*20/N}),fl=raw.map(Math.floor),used=fl.reduce(function(a,b){return a+b},0);
+  var rem=raw.map(function(x,i){return[x-fl[i],i]}).sort(function(a,b){return b[0]-a[0]});
+  for(var i=0;used<20&&i<rem.length;i++,used++)fl[rem[i][1]]++;
+  return fl;
+}
+function bodyOf(s){
+  var h='',i;
+  if(s.ty==='big'){
+    h='<div class="bd"><div class="ic" style="flex:1;max-width:300px">';for(i=0;i<20;i++)h+=ic(R,52);
+    h+='</div><div style="flex:1"><div style="font-size:72px;font-weight:600;color:'+R+';line-height:1">'+N+'</div><div style="font-size:14px;margin-top:4px">estudiantes de la cohorte 1</div></div></div>';
+  }else if(s.ty==='one'){
+    var sum=0;s.d.forEach(function(r){sum+=r[1]});
+    var d2=s.d.slice();if(sum<N)d2.push(['Otras',N-sum]);
+    var n20=icons20(d2);
+    h='<div class="bd"><div style="width:250px"><div class="ic">';
+    d2.forEach(function(r,j){for(i=0;i<n20[j];i++)h+=ic(j<s.d.length?PAL[j%PAL.length]:GRY,46)});
+    h+='</div></div><div class="lg">';
+    s.d.forEach(function(r,j){h+='<div class="lr">'+ic(PAL[j%PAL.length],17)+'<span style="flex:1">'+esc(r[0])+'</span><b style="color:'+(j===0?R:'#1a1a1a')+'">'+pc(r[1])+' %</b><s>('+r[1]+')</s></div>'});
+    h+='</div></div>';
+  }else if(s.ty==='many'){
+    h='<div class="bd" style="flex-direction:column;align-items:stretch;justify-content:center;gap:0">';
+    s.d.forEach(function(r,j){
+      var f='',fill=Math.round(r[1]*20/N);for(i=0;i<20;i++)f+=ic(i<fill?(j<3?R:'#6b6a64'):GRY,13);
+      h+='<div class="mr"><span>'+esc(r[0])+'</span><span style="display:flex;gap:1px">'+f+'</span><b style="color:'+(j<3?R:'#1a1a1a')+'">'+pc(r[1])+' %</b></div>';
+    });
+    h+='</div>';
+  }else if(s.ty==='map'&&GEO){
+    var cn={},mx=0,k=Math.cos(6*Math.PI/180),lon0=-82,lat1=13.6,W=(-66.8-lon0)*k,Hh=lat1+4.3,p='',labs='';
+    s.d.forEach(function(r){cn[r[0]]=r[1];if(r[0]!=='Exterior'&&r[1]>mx)mx=r[1]});
+    var P=function(pt){return[((pt[0]-lon0)*k).toFixed(3),(lat1-pt[1]).toFixed(3)]};
+    GEO.features.forEach(function(f){
+      var polys=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates,d='',best=null;
+      polys.forEach(function(poly){poly.forEach(function(ring,ri){d+='M'+ring.map(function(q){return P(q).join(',')}).join('L')+'Z';if(ri===0&&(!best||ring.length>best.length))best=ring})});
+      var n=cn[f.properties.n]||0;
+      p+='<path d="'+d+'" fill="'+(n?R:'#ecece8')+'" fill-opacity="'+(n?(0.3+0.7*n/mx).toFixed(2):1)+'" stroke="#fff" stroke-width=".05"><title>'+esc(f.properties.n)+': '+n+'</title></path>';
+      if(n&&best){var xs=best.map(function(q){return +P(q)[0]}),ys=best.map(function(q){return +P(q)[1]});
+        labs+='<text x="'+((Math.min.apply(0,xs)+Math.max.apply(0,xs))/2).toFixed(2)+'" y="'+((Math.min.apply(0,ys)+Math.max.apply(0,ys))/2+0.17).toFixed(2)+'" style="font-size:.55px;fill:#fff;font-weight:700;text-anchor:middle">'+n+'</text>'}
+    });
+    h='<div class="bd"><svg viewBox="0 0 '+W.toFixed(2)+' '+Hh.toFixed(2)+'" style="height:100%;max-height:255px;flex:none" role="img" aria-label="Mapa de Colombia">'+p+labs+'</svg><div class="lg">';
+    s.d.filter(function(r){return r[0]!=='Exterior'}).slice(0,6).forEach(function(r){h+='<div class="lr"><span style="flex:1">'+esc(r[0])+'</span><b style="color:'+R+'">'+pc(r[1])+' %</b><s>('+r[1]+')</s></div>'});
+    var ex=cn['Exterior'];if(ex)h+='<div class="lr"><span style="flex:1">Exterior</span><b>'+pc(ex)+' %</b><s>('+ex+')</s></div>';
+    h+='</div></div>';
+  }else if(s.ty==='rate'){
+    h='<div class="bd" style="flex-direction:column;align-items:stretch;justify-content:center;gap:0">';
+    var mn=Math.min.apply(0,s.d.map(function(x){return x.a}));
+    s.d.forEach(function(x){
+      var lowr=x.a===mn,f='';
+      for(i=1;i<=5;i++){var fl=Math.max(0,Math.min(1,x.a-(i-1)));f+='<span style="display:inline-block;width:15px;height:15px;border-radius:50%;margin-right:4px;border:1.5px solid '+(lowr?R:'#9a9993')+';background:linear-gradient(90deg,'+(lowr?R:'#6b6a64')+' '+Math.round(fl*100)+'%,transparent '+Math.round(fl*100)+'%)"></span>'}
+      h+='<div class="mr" style="grid-template-columns:170px 1fr 130px"><span>'+esc(x.n)+'</span><span style="white-space:nowrap">'+f+'</span><b style="color:'+(lowr?R:'#1a1a1a')+'">'+dec(x.a)+' <span style="font-weight:400;font-size:11px;color:#7a7a74">· '+x.hi+' % cómodos</span></b></div>';
+    });
+    h+='</div>';
+  }else if(s.ty==='cloud'){
+    var mx2=s.d[0][1],mn2=s.d[s.d.length-1][1],w=s.d.slice().sort(function(a,b){return a[0].localeCompare(b[0],'es')});
+    h='<div class="bd" style="justify-content:center"><div style="display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:center;align-items:baseline;max-width:580px">';
+    w.forEach(function(r){var z=14+(mx2===mn2?.5:(r[1]-mn2)/(mx2-mn2))*30;h+='<span style="font-size:'+z.toFixed(0)+'px;font-weight:600;color:'+(r[1]===mx2?R:(r[1]>=(mx2+mn2)/2?'#1a1a1a':'#7a7a74'))+'">'+esc(r[0])+'</span>'});
+    h+='</div></div>';
+  }
+  return h;
+}
+
+function draw(){
+  var st=document.getElementById('st');
+  if(!S.length)return;
+  if(cur>=S.length)cur=S.length-1;
+  var s=S[cur];
+  st.innerHTML='<div class="hd"><span>Maestría en Geotecnia · Cohorte 1</span><span>'+N+(N===1?' respuesta':' respuestas')+'</span></div><div class="kk">'+esc(s.k)+'</div><div class="tt">'+esc(s.t)+'</div><div class="qq">'+esc(s.q)+'</div>'+bodyOf(s);
+  document.getElementById('ct').textContent=(cur+1)+' / '+S.length;
+}
+function fit(){
+  var v=document.getElementById('view'),f=document.getElementById('fit'),w=v.clientWidth-24,h=v.clientHeight-24,k=Math.max(.3,Math.min(w/680,h/383));
+  f.style.transform='scale('+k+')';
+  f.style.left=((v.clientWidth-680*k)/2)+'px';f.style.top=((v.clientHeight-383*k)/2)+'px';
+}
+function go(d){if(!S.length)return;cur=(cur+d+S.length)%S.length;draw()}
+function message(html){
+  S=[];document.getElementById('fit').style.display='none';
+  var m=document.getElementById('msgbox');
+  if(!m){m=document.createElement('div');m.id='msgbox';m.className='msg';document.getElementById('view').appendChild(m)}
+  m.innerHTML=html;document.getElementById('ct').textContent='';
+}
+function showStage(){document.getElementById('fit').style.display='';var m=document.getElementById('msgbox');if(m)m.remove()}
+
+async function run(){
+  try{
+    rows=await load();
+    document.getElementById('n').textContent=rows.length+(rows.length===1?' respuesta':' respuestas');
+    if(!GEO)GEO=await (await fetch('mapa.geo.json')).json();
+    build();
+    if(!S.length){message('<p><b>Aún no hay respuestas.</b></p><p>Comparta el enlace del formulario con el grupo. Añada <code>?demo=1</code> al enlace para ver un ejemplo.</p>');return}
+    showStage();draw();fit();
+  }catch(e){
+    if(e==='pin'){
+      message('<p><b>Resultados protegidos</b></p><input id="pi" type="password" placeholder="Clave del docente" autocomplete="off"><button id="pb" type="button">Ver resultados</button><p id="pe"></p>');
+      document.getElementById('pb').onclick=function(){sessionStorage.setItem('diag_pin',document.getElementById('pi').value);run()};
+      if(sessionStorage.getItem('diag_pin'))document.getElementById('pe').textContent='Clave incorrecta.';
+    }else message('<p>No se pudieron cargar los resultados. Revise la conexión e intente de nuevo.</p>');
+  }
+}
+document.getElementById('rf').onclick=run;
+document.getElementById('pv').onclick=function(){go(-1)};
+document.getElementById('nx').onclick=function(){go(1)};
+document.getElementById('st').addEventListener('click',function(e){var r=this.getBoundingClientRect();go(e.clientX>r.left+r.width/2?1:-1)});
+document.addEventListener('keydown',function(e){
+  if(e.target&&e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(1)}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(-1)}
+});
+document.getElementById('fs').onclick=function(){
+  try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen()}catch(e){}
+};
+document.addEventListener('fullscreenchange',function(){document.body.classList.toggle('fs',!!document.fullscreenElement);setTimeout(fit,60)});
+window.addEventListener('resize',fit);
+if(!DEMO&&CFG.API)setInterval(run,25000);
+run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnóstico del grupo · Maestría en Geotecnia, Cohorte 1</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#f6f6f4;--card:#fff;--ink:#1a1a1a;--ink2:#5c5c58;--line:#dcdcd6;--accent:#c8000f;--accent-bg:#fbe9eb;--ok:#1f7a3d;--err:#b3261e;--radius:12px}
+@media (prefers-color-scheme:dark){:root{--bg:#161616;--card:#1f1f1f;--ink:#f2f2f0;--ink2:#a8a8a2;--line:#3a3a36;--accent:#ff4a58;--accent-bg:#3a1a1d;--ok:#5fcf84;--err:#ff8a80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:24px 16px 64px}
+.brand{display:flex;align-items:center;gap:14px;margin:0 0 18px}
+.brand img{width:64px;height:64px;flex:none}
+.bn{font-size:18px;font-weight:600;line-height:1.25}
+.bs{font-size:13px;color:var(--ink2)}
+h1{font-size:24px;font-weight:600;margin:0 0 4px}
+.sub{color:var(--ink2);font-size:14px;margin:0 0 20px}
+.banner{background:var(--accent-bg);border:1px solid var(--accent);color:var(--ink);border-radius:var(--radius);padding:10px 14px;font-size:14px;margin:0 0 16px}
+.sec{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin:28px 0 8px;font-weight:600}
+.q{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:0 0 12px}
+.q.bad{border-color:var(--err)}
+.ql{display:block;font-weight:600;font-size:15px;margin:0 0 10px}
+.ql .n{color:var(--ink2);font-weight:400;margin-right:6px}
+.ql .r{color:var(--err);margin-left:3px}
+.hint{color:var(--ink2);font-size:13px;margin:8px 0 0}
+.err{color:var(--err);font-size:13px;margin:8px 0 0;display:none}
+.q.bad .err{display:block}
+input[type=text],textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+input[type=text]:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+textarea{resize:vertical;min-height:70px}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 200px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chip span{display:block;padding:7px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:var(--bg)}
+.chip input:checked+span{background:var(--accent-bg);border-color:var(--accent);font-weight:600}
+.chip input:focus-visible+span{outline:2px solid var(--accent);outline-offset:1px}
+.chip input:disabled+span{opacity:.45;cursor:not-allowed}
+.other{margin-top:10px;display:none}.other.on{display:block}
+.mx{width:100%;border-collapse:collapse;font-size:14px}
+.mx th{font-weight:400;color:var(--ink2);text-align:center;padding:4px 2px}
+.mx td{padding:7px 2px;text-align:center;border-top:1px solid var(--line)}
+.mx td:first-child{text-align:left;padding-right:8px}
+.mx input{width:20px;height:20px;accent-color:var(--accent);cursor:pointer}
+.cnt{color:var(--ink2);font-size:12px;text-align:right;margin-top:4px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.consent input{margin-top:4px;width:18px;height:18px;accent-color:var(--accent)}
+button.go{font:inherit;font-weight:600;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:12px 22px;cursor:pointer}
+button.go:disabled{opacity:.6;cursor:wait}
+.msg{margin-left:12px;font-size:14px}
+.hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.done{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 20px;text-align:center}
+.done h2{margin:0 0 6px;font-size:20px}
+.done p{color:var(--ink2);margin:0 0 14px}
+a.btn{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<div class="brand"><img src="logo-unilibre.png" alt="Universidad Libre" width="64" height="64"><div><div class="bn">Maestría en Geotecnia · Cohorte 1</div><div class="bs">Universidad Libre</div></div></div>
+<h1>Diagnóstico del grupo</h1>
+<p class="sub">Metodología de investigación · unos 5 minutos</p>
+<div id="demo" class="banner" hidden>Modo de prueba: todavía no está conectada la hoja de Google, así que las respuestas se guardan solo en este navegador.</div>
+<form id="f" novalidate autocomplete="off"></form>
+<div id="done" class="done" hidden>
+  <h2 id="doneT">Gracias</h2>
+  <p>Tus respuestas quedaron registradas. Si necesitas corregir algo, vuelve a enviar el formulario con tu mismo nombre y se actualizará.</p>
+  <a class="btn" href="#" id="again">Corregir mis respuestas</a>
+</div>
+</main>
+<script src="config.js"></script>
+<script src="schema.js"></script>
+<script>
+(function(){
+var CFG=window.DIAG||{},form=document.getElementById('f'),KEY='diag_geo_borrador';
+function el(t,a,h){var e=document.createElement(t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(h!=null)e.innerHTML=h;return e}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function label(q){return '<span class="ql"><span class="n">'+q.n+'</span>'+esc(q.t)+(q.req?'<span class="r" aria-hidden="true">*</span>':'')+'</span>'}
+function chips(q,type){
+  var h='<div class="chips" role="group" aria-label="'+esc(q.t)+'">';
+  q.opts.forEach(function(o,i){h+='<label class="chip"><input type="'+type+'" name="'+q.k+'" value="'+esc(o)+'"><span>'+esc(o)+'</span></label>'});
+  h+='</div>';
+  if(q.other)h+='<div class="other" id="o_'+q.k+'"><input type="text" name="'+q.other+'" placeholder="'+(q.type==='single'?'¿Cuál es su formación?':'¿Cuál?')+'" maxlength="80"></div>';
+  if(q.max)h+='<p class="hint">Elija hasta '+q.max+'</p>';
+  return h;
+}
+SCHEMA.forEach(function(s){
+  form.appendChild(el('div',{class:'sec'},s.id+'. '+esc(s.title)));
+  s.qs.forEach(function(q){
+    var d=el('div',{class:'q','data-k':q.k});
+    var h=label(q);
+    if(q.type==='text')h+='<input type="text" name="'+q.k+'" placeholder="'+esc(q.ph||'')+'" maxlength="120">';
+    else if(q.type==='single')h+=chips(q,'radio');
+    else if(q.type==='multi')h+=chips(q,'checkbox');
+    else if(q.type==='depto'){
+      h+='<div class="row"><select name="departamento"><option value="">Departamento</option>'+DEPTOS.map(function(x){return'<option>'+esc(x)+'</option>'}).join('')+'</select><input type="text" name="ciudad" placeholder="Ciudad" maxlength="60"></div>';
+    }else if(q.type==='matrix'){
+      h+='<table class="mx"><tr><th></th>'+[1,2,3,4,5].map(function(n){return'<th>'+n+'</th>'}).join('')+'</tr>'+q.items.map(function(it){
+        return'<tr><td>'+esc(it.t)+'</td>'+[1,2,3,4,5].map(function(n){return'<td><input type="radio" name="skill_'+it.k+'" value="'+n+'" aria-label="'+esc(it.t)+': '+n+'"></td>'}).join('')+'</tr>'}).join('')+'</table><p class="hint">'+esc(q.hint)+'</p>';
+    }else if(q.type==='textarea'){
+      h+='<textarea name="'+q.k+'" maxlength="'+q.max+'" placeholder="'+esc(q.ph||'')+'"></textarea><div class="cnt" data-cnt="'+q.k+'">0 / '+q.max+'</div>';
+    }
+    h+='<p class="err" role="alert"></p>';
+    d.innerHTML=h;form.appendChild(d);
+  });
+});
+form.appendChild(el('div',{class:'q','data-k':'consent'},'<label class="consent"><input type="checkbox" name="consent"><span>Autorizo el uso de mis respuestas con fines académicos del curso, conforme a la Ley 1581 de 2012. Mi nombre solo lo ve el docente; los resultados del grupo se muestran de forma agregada.</span></label><p class="err" role="alert"></p>'));
+form.appendChild(el('div',{class:'hp','aria-hidden':'true'},'<label>No llenar<input type="text" name="web" tabindex="-1" autocomplete="off"></label>'));
+var bar=el('div',null,'<button class="go" type="submit" id="send">Enviar respuestas</button><span class="msg" id="msg" role="status"></span>');
+form.appendChild(bar);
+
+function get(n){return form.elements[n]}
+function vals(n){var r=form.querySelectorAll('input[name="'+n+'"]:checked'),a=[];r.forEach(function(x){a.push(x.value)});return a}
+function collect(){
+  var d={};
+  d.nombre=get('nombre').value.trim();
+  d.departamento=get('departamento').value;d.ciudad=get('ciudad').value.trim();
+  SCHEMA.forEach(function(s){s.qs.forEach(function(q){
+    if(q.type==='single'){d[q.k]=vals(q.k)[0]||'';if(q.other)d[q.other]=get(q.other).value.trim()}
+    if(q.type==='multi'){d[q.k]=vals(q.k);if(q.other)d[q.other]=get(q.other).value.trim()}
+    if(q.type==='textarea')d[q.k]=get(q.k).value.trim();
+  })});
+  SKILLS.forEach(function(it){d['skill_'+it.k]=vals('skill_'+it.k)[0]||''});
+  d.consent=get('consent').checked;d.web=get('web').value;
+  return d;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(collect()))}catch(e){}}
+function fill(d){
+  if(!d)return;
+  get('nombre').value=d.nombre||'';get('departamento').value=d.departamento||'';get('ciudad').value=d.ciudad||'';
+  SCHEMA.forEach(function(s){s.qs.forEach(function(q){
+    if(q.type==='single'){form.querySelectorAll('input[name="'+q.k+'"]').forEach(function(i){i.checked=(i.value===d[q.k])});if(q.other)get(q.other).value=d[q.other]||''}
+    if(q.type==='multi'){var v=d[q.k]||[];form.querySelectorAll('input[name="'+q.k+'"]').forEach(function(i){i.checked=v.indexOf(i.value)>-1});if(q.other)get(q.other).value=d[q.other]||''}
+    if(q.type==='textarea')get(q.k).value=d[q.k]||'';
+  })});
+  SKILLS.forEach(function(it){var v=d['skill_'+it.k];form.querySelectorAll('input[name="skill_'+it.k+'"]').forEach(function(i){i.checked=(i.value===String(v))})});
+  refresh();
+}
+function qOf(k){return form.querySelector('.q[data-k="'+k+'"]')}
+function refresh(){
+  SCHEMA.forEach(function(s){s.qs.forEach(function(q){
+    if(q.type==='single'&&q.other){qOf(q.k).querySelector('.other').classList.toggle('on',vals(q.k)[0]==='Otra')}
+    if(q.type==='multi'){
+      var box=qOf(q.k),sel=vals(q.k);
+      if(q.other)box.querySelector('.other').classList.toggle('on',sel.indexOf('Otra')>-1);
+      if(q.max){box.querySelectorAll('input[type=checkbox]').forEach(function(i){i.disabled=!i.checked&&sel.length>=q.max})}
+    }
+    if(q.type==='textarea'){form.querySelector('[data-cnt="'+q.k+'"]').textContent=get(q.k).value.length+' / '+q.max}
+  })});
+}
+form.addEventListener('change',function(e){
+  var t=e.target;
+  SCHEMA.forEach(function(s){s.qs.forEach(function(q){
+    if(q.type==='multi'&&q.exclusive&&t.name===q.k&&t.checked){
+      form.querySelectorAll('input[name="'+q.k+'"]').forEach(function(i){
+        if(t.value===q.exclusive){if(i!==t)i.checked=false}
+        else if(i.value===q.exclusive)i.checked=false;
+      });
+    }
+  })});
+  refresh();save();
+  var box=t.closest('.q');if(box)box.classList.remove('bad');
+});
+form.addEventListener('input',function(e){refresh();save();var b=e.target.closest('.q');if(b)b.classList.remove('bad')});
+
+function bad(k,msg){var b=qOf(k);b.classList.add('bad');b.querySelector('.err').textContent=msg;return b}
+function validate(d){
+  var first=null,m;
+  function mark(k,msg){var b=bad(k,msg);if(!first)first=b}
+  form.querySelectorAll('.q.bad').forEach(function(b){b.classList.remove('bad')});
+  if(!d.nombre||d.nombre.length<3)mark('nombre','Escriba su nombre completo.');
+  SCHEMA.forEach(function(s){s.qs.forEach(function(q){
+    if(q.type==='single'&&q.req){if(!d[q.k])mark(q.k,'Elija una opción.');else if(q.other&&d[q.k]==='Otra'&&!d[q.other])mark(q.k,'Escriba cuál es su formación.')}
+    if(q.type==='multi'&&q.req&&!d[q.k].length)mark(q.k,'Elija al menos una opción.');
+    if(q.type==='textarea'&&q.req&&d[q.k].length<5)mark(q.k,'Escriba una frase.');
+  })});
+  if(!d.departamento)mark('departamento','Elija su departamento.');
+  else if(d.departamento!=='Exterior'&&!d.ciudad)mark('departamento','Escriba su ciudad.');
+  if(SKILLS.some(function(it){return !d['skill_'+it.k]}))mark('skills','Califique las siete filas.');
+  if(!d.consent)mark('consent','Marque la autorización para enviar.');
+  if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
+  return !first;
+}
+function uuid(){return 'r'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function setMsg(t,ok){var m=document.getElementById('msg');m.textContent=t;m.style.color=ok?'var(--ok)':'var(--err)'}
+
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  var d=collect();
+  if(!validate(d)){setMsg('Revise las preguntas marcadas en rojo.',false);return}
+  var btn=document.getElementById('send');btn.disabled=true;setMsg('Enviando…',true);
+  d.rid=uuid();d.enviado=new Date().toISOString();
+  var p;
+  if(!CFG.API){
+    p=new Promise(function(res){
+      try{var rows=JSON.parse(localStorage.getItem('diag_geo_demo')||'[]');rows=rows.filter(function(r){return r.nombre!==d.nombre});rows.push(d);localStorage.setItem('diag_geo_demo',JSON.stringify(rows))}catch(x){}
+      res(true)});
+  }else{
+    p=fetch(CFG.API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)})
+      .then(function(){return confirmar(d.rid)});
+  }
+  p.then(function(ok){
+    btn.disabled=false;
+    if(ok){form.hidden=true;document.getElementById('doneT').textContent='Gracias, '+d.nombre.split(' ')[0];document.getElementById('done').hidden=false;window.scrollTo(0,0);try{localStorage.removeItem(KEY)}catch(x){}}
+    else setMsg('No pudimos confirmar el envío. Revise su conexión e intente de nuevo.',false);
+  }).catch(function(){btn.disabled=false;setMsg('No pudimos enviar. Revise su conexión e intente de nuevo.',false)});
+});
+async function confirmar(rid){
+  for(var i=0;i<5;i++){
+    await wait(1200);
+    try{var r=await fetch(CFG.API+'?action=check&rid='+encodeURIComponent(rid));var j=await r.json();if(j&&j.found)return true}catch(x){}
+  }
+  return false;
+}
+document.getElementById('again').addEventListener('click',function(e){e.preventDefault();document.getElementById('done').hidden=true;form.hidden=false;window.scrollTo(0,0)});
+if(!CFG.API)document.getElementById('demo').hidden=false;
+try{fill(JSON.parse(localStorage.getItem(KEY)||'null'))}catch(e){}
+refresh();
+})();
+</script>
+</body>
+</html>
