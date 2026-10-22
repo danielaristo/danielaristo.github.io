@@ -27,7 +27,7 @@ window.SCHEMA = [
     { k: "ocupacion", n: 6, t: "Ocupación principal", type: "single", req: true,
       opts: ["Consultoría o diseño", "Construcción u obra", "Interventoría", "Entidad pública", "Academia o investigación", "Minería, energía o hidrocarburos", "Independiente", "Sin empleo actual"] },
     { k: "experiencia", n: 7, t: "Años de experiencia en geotecnia", type: "single", req: true,
-      opts: ["Ninguno", "1-3", "4-7", "8-15", "Más de 15"] },
+      opts: ["Ninguna", "1-3 años", "4-7 años", "8-15 años", "Más de 15 años"] },
     { k: "areas", n: 8, t: "Áreas donde ha trabajado", type: "multi", req: true, max: 3, exclusive: "Ninguna aún",
       opts: ["Taludes y laderas", "Cimentaciones", "Excavaciones y túneles", "Vías y subrasantes", "Presas y relaves", "Geotecnia sísmica", "Gestión del riesgo", "Mecánica de rocas", "Geotecnia ambiental", "Ninguna aún"] },
     { k: "herramientas", n: 9, t: "Herramientas que usa", type: "multi", req: false, exclusive: "Ninguna", other: "herramientas_otra", otherLabel: "Otra",
